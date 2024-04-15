@@ -7,7 +7,7 @@ public class MemberRepository {
     public Member getMemberById(Long id) {
         return null;
     }
-    public Member getMemberByPhoneNumber(PhoneNumber phoneNumber) {
+    public Member getMemberByPhoneNumber(PhoneNumber phoneNumber) { // 못찾으면 null 반환
         return null;
     }
 

@@ -11,24 +11,18 @@ public class HomeController {
     MemberService memberService = new MemberService(new MemberRepository());
     InputView inputView = new InputView();
 
-    public void init() {
+    public Member init() {
         PhoneNumber phoneNumber = inputView.inputPhoneNumber();
-        if(phoneNumber == null) {
+        if (phoneNumber == null) {  // q를 누른 경우임
             int userInput = inputView.inputKillProgram();
-            if(userInput == 1) {    // 진짜 종료
+            if (userInput == 1) {    // 진짜 종료
                 System.exit(0);
             } else if (userInput == 2) {
-                init(); // 종료 하지마인 경우
+                init();
             }
         }
-        Member member = memberService.enter(phoneNumber);   //  일단 여기까지녕
+        Member member = memberService.enter(phoneNumber);
 
-        if(Objects.equals(phoneNumber.getPhoneNumber(), "MANAGER")) {
-            //
-        } else {
-
-        }
-
-
+        return member;
     }
 }

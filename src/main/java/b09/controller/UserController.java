@@ -37,11 +37,11 @@ public class UserController {
             if(inputView.inputLogoutConfirm() == 2) {
                 initMain(member);
             }
-            return;     // 진짜 안녕
+            return;
         }
     }
 
-    public void reservation(Member member) {
+    private void reservation(Member member) {
         LocalDate todaysDate = inputView.inputTodaysDate();
         if(todaysDate == null) return;
         ReservedDate reservedDate = inputView.inputReservedDate();
@@ -100,7 +100,7 @@ public class UserController {
         return additionalProduct;
     }
 
-    public void lookUpReservation(Member member) {
+    private void lookUpReservation(Member member) {
         List<Reservation> reservations = reservationService.getMembersReservation(member);
 
         if(reservations.isEmpty()) {

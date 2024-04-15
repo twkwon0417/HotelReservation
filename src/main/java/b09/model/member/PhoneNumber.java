@@ -1,6 +1,7 @@
 package b09.model.member;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PhoneNumber {
     String phoneNumber;
@@ -18,7 +19,7 @@ public class PhoneNumber {
     }
 
     private boolean isManager(String phoneNumber) {
-        return false;
+        return Objects.equals(phoneNumber, "B09");
     }
 
     public String getPhoneNumber() {

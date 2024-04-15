@@ -101,15 +101,30 @@ public class InputView {
         return 0;
     }
 
-    public int inputRoomChanged() {
+    public int inputRoomChanged() { //객실을 교체하시겠습니까?1.yes2.no
         return 0;
     }
 
-    public int inputRoomRestricted() {
+    public int inputRoomRestricted() {  // 객실을제한 하시겠습니까?1.yes2.no
         return 0;
     }
 
-    public int inputRoomDateExtended() {
+    public int inputRoomDateExtended() {    // 투숙 기간을연장 하시겠습니까?1.yes2.no
         return 0;
+    }
+
+    public LocalDate inputNewCheckoutDate() {
+        return null;
+    }
+    public int inputReturnToManagerMenu() {    // 관리자 메뉴로돌아가시겠습니까?1. yes2. no
+        return 0;
+    }
+
+    public PhoneNumber inputUserPhoneNumber() {
+        return null;
+    }
+
+    public String inputChangeRankCommand() {
+        return null;
     }
 }
