@@ -46,7 +46,12 @@ public class Reservation {
         return numberOfPeople;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public AdditionalProduct getAdditionalProduct() {
         return additionalProduct;
     }
 }
+

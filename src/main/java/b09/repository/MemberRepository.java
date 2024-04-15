@@ -4,6 +4,7 @@ import b09.model.Member;
 import b09.model.member.PhoneNumber;
 
 public class MemberRepository {
+    private static long sequence = 0L; //static
     public Member getMemberById(Long id) {
         return null;
     }
@@ -11,7 +12,8 @@ public class MemberRepository {
         return null;
     }
 
-    public Member registerMember(PhoneNumber phoneNumber) {
+    public Member registerMember(Member member) {
+        member.setId(++sequence);
         return null;
     }
 
