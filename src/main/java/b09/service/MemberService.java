@@ -14,14 +14,10 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Member enter(PhoneNumber phoneNumber) {  // 로그인 화면에서 들어올떄 쓰는 로직 : login + register이라 보시면 편합니다.
+    public Member enter(PhoneNumber phoneNumber) throws Exception {  // 로그인 화면에서 들어올떄 쓰는 로직 : login + register이라 보시면 편합니다.
         Member member = memberRepository.getMemberByPhoneNumber(phoneNumber);
         if (member == null) {
-            member = memberRepository.registerMember(new Member(
-                    phoneNumber,
-                    0,
-                    new ArrayList<>()
-            ));
+            throw new Exception("회원이 아닌 전화번호 입니다.");
         }
         return member;
     }

@@ -40,7 +40,7 @@ public class MemberRepository {
             System.out.println("파일을 찾을 수 없습니다.");
         }
     }
-    public void editMember(Member memberToBeEdited, Member newMember) throws IOException { // 디비 접근법 알아내기
+    public void editMember(Member memberToBeEdited, Member newMember) { // 디비 접근법 알아내기
         // 절대 db(txt)파일 수정해
         // 1: 피 수정자 2: 이 객체의 정보로 바꿔줘
 
@@ -55,7 +55,11 @@ public class MemberRepository {
         if (file.exists()) {
             file.delete();
         }
-        file.createNewFile();
+        try {   // 일단 임시방편 여기서 Exception Handling 해주세여
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("clientInfo.txt"));

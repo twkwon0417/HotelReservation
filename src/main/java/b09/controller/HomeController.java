@@ -21,7 +21,13 @@ public class HomeController {
                 init();
             }
         }
-        Member member = memberService.enter(phoneNumber);
+        Member member;
+        try {
+            member = memberService.enter(phoneNumber);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return init();
+        }
 
         return member;
     }
