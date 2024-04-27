@@ -45,7 +45,7 @@ public class UserController {
     private void reservation(Member member) {
         LocalDate todaysDate = inputView.inputTodaysDate();
         if(todaysDate == null) return;
-        ReservedDate reservedDate = inputView.inputReservedDate();
+        ReservedDate reservedDate = inputView.inputReservedDate(todaysDate);
         if(reservedDate == null) return;
         reservedDate.setTodaysDate(todaysDate);
         Integer roomType = inputView.inputRoomType();

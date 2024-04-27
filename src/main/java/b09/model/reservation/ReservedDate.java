@@ -8,7 +8,8 @@ public class ReservedDate {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public ReservedDate(String twoDates) throws Exception {
+    public ReservedDate(String twoDates, LocalDate todaysDate) throws Exception {
+        this.todaysDate = todaysDate;
         try {
             String[] dates = twoDates.split(" ");
             if (dates.length != 2) {
@@ -20,14 +21,17 @@ public class ReservedDate {
             int endYear = Integer.parseInt(twoDates.substring(7, 9));
             int endMonth = Integer.parseInt(twoDates.substring(9, 11));
             int endDay = Integer.parseInt(twoDates.substring(11, 13));
-            this.startDate = LocalDate.of(startYear, startMonth, startDay);
+            this.startDate = LocalDate.of(startYear, startMonth, startDay); // TODO: startyear: 20XX 로 찍게
             this.endDate = LocalDate.of(endYear, endMonth, endDay);
         } catch (NumberFormatException | DateTimeParseException e) {
             throw new Exception("날짜 형식이 올바르지 않습니다.");
         }
+        validate();
     }
 
     private void validate() throws Exception {
+        System.out.println(startDate);
+        System.out.println(endDate);
         validateCheckoutBeforeCheckin();
         validateCheckinIsBeforeToday();
         validateStayMoreThanWeek();
@@ -41,8 +45,8 @@ public class ReservedDate {
     }
 
     private void validateCheckinIsBeforeToday() throws Exception {
-        if (startDate.compareTo(todaysDate) <= 0) {
-            throw new Exception("당일 예약은 불가합니다.");
+        if (!startDate.isAfter(todaysDate)) {
+            throw new Exception("당일 예약은 불가합니다. + 과거 예약은 불가합니다.");
         }
     }
 

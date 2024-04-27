@@ -15,14 +15,14 @@ import static java.lang.Long.parseLong;
 public class MemberRepository {
     private static long sequence = 0L; //static
     ArrayList<Member> members = new ArrayList<>();
-    public Member getMemberById(Long id) {
+    public Member getMemberById(Long id) {  // TODO:구현 해주쇼
         return null;
     }
-    public Member getMemberByPhoneNumber(PhoneNumber phoneNumber) { // 못찾으면 null 반환
+    public Member getMemberByPhoneNumber(PhoneNumber phoneNumber) { // 못찾으면 null 반환 TODO: 구현 해주쇼
         try {
             return new Member(new PhoneNumber("01024159056"), 0, List.of(1));
         } catch (Exception e) {
-            System.out.println("FUCXK");
+            System.out.println("Fㅗㄹ");
         }
         return null;
     }
