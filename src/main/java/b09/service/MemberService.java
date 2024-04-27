@@ -27,13 +27,80 @@ public class MemberService {
     }
 
     public void changeMemberRank(Member member, String input) throws Exception{ // member에 rank parameter가 없는데 그 등급이 되기 위한 최소한의 금액을 넣어주세요. 절대 txt 바뀌어야해
-        Rank rank = commandToRank(input); // 실실적으로 사용자의 입력값을 처리하는 메서드
+        Rank rank = commandToRank(input);
+        int minimumSpent;
+
+        switch (rank) {
+            case BRONZE:
+                minimumSpent = 0;
+                break;
+            case SILVER:
+                minimumSpent = 200000;
+                break;
+            case GOLD:
+                minimumSpent = 500000;
+                break;
+            case PLATINUM:
+                minimumSpent = 800000;
+                break;
+            case VIP:
+                minimumSpent = 1000000;
+                break;
+            default:
+                break;
+        }
+
         Member newMember = new Member(member.getPhoneNumber(), rank.getMinimumSpent(), member.getReservations());
         memberRepository.editMember(member, newMember);
     }
 
     private Rank commandToRank(String input) throws Exception{ // 38개 단어들 중 하나가 아니면 Exception을 던지게 해주세요ㅕ.
-        return null;
+        switch (input) {
+            case ".":
+            case "b":
+            case "br":
+            case "bro":
+            case "bron":
+            case "bronz":
+            case "bronze":
+            case "동":
+                return Rank.BRONZE;
+            case "/":
+            case "s":
+            case "si":
+            case "sil":
+            case "silv":
+            case "silve":
+            case "silver":
+            case "은":
+                return Rank.SILVER;
+            case "!":
+            case "g":
+            case "go":
+            case "gol":
+            case "gold":
+            case "금":
+                return Rank.GOLD;
+            case "+":
+            case "p":
+            case "pl":
+            case "pla":
+            case "plat":
+            case "plati":
+            case "platin":
+            case "platinu":
+            case "platinum":
+            case "백금":
+                return Rank.PLATINUM;
+            case "-":
+            case "v":
+            case "vi":
+            case "vip":
+            case "왕":
+                return Rank.VIP;
+            default:
+                throw new Exception("잘못된 등급입니다.");
+        }
     }
 
     public Member getByPhoneNumber(PhoneNumber phoneNumber) {
