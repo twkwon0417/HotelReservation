@@ -7,7 +7,7 @@ import java.util.List;
 public class Member { // 아마도 완성
     private Long id;
     private final PhoneNumber phoneNumber;
-    private final int totalMoneySpent;
+    private int totalMoneySpent;
     private final List<Integer> reservations;
 
     public Member (PhoneNumber phoneNumber, int totalMoneySpent, List<Integer> reservations) {
@@ -20,6 +20,9 @@ public class Member { // 아마도 완성
         this.id = id;
     }
 
+    public void setTotalMoneySpent(int totalMoneySpent){
+        this.totalMoneySpent = totalMoneySpent;
+    }
     public Rank getRank() {
         return Rank.setRank(this.totalMoneySpent);
     }
