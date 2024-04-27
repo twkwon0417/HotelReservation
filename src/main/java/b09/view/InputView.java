@@ -60,7 +60,7 @@ public class InputView {
 
     public ReservedDate inputReservedDate() {   // 이런 식으로 try-catch로 원하는 입력이 들어올떄까지 계속 돌릴슈 있음. 참고 하면 좋읅섯 같습니다.
         System.out.print("날짜 두개 압력해봐라:");
-        String input = scan.next();
+        String input = scan.nextLine();
         try {
             if (Objects.equals(input, "q")) {
                 return null;

@@ -1,6 +1,7 @@
 package b09.repository;
 
 import b09.model.Member;
+import b09.model.Reservation;
 import b09.model.member.PhoneNumber;
 
 import java.io.*;
@@ -18,6 +19,11 @@ public class MemberRepository {
         return null;
     }
     public Member getMemberByPhoneNumber(PhoneNumber phoneNumber) { // 못찾으면 null 반환
+        try {
+            return new Member(new PhoneNumber("01024159056"), 0, List.of(1));
+        } catch (Exception e) {
+            System.out.println("FUCXK");
+        }
         return null;
     }
 

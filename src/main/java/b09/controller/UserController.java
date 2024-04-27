@@ -7,6 +7,8 @@ import b09.model.reservation.AdditionalProduct;
 import b09.model.reservation.NumberOfPeople;
 import b09.model.reservation.ReservedDate;
 import b09.model.reservation.RoomNumber;
+import b09.repository.MemberRepository;
+import b09.repository.ReservationRepository;
 import b09.service.ReservationService;
 import b09.service.RoomService;
 import b09.view.InputView;
@@ -17,10 +19,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserController {
-    InputView inputView;
-    OutputView outputView;
-    RoomService roomService;
-    ReservationService reservationService;
+    InputView inputView = new InputView();
+    OutputView outputView = new OutputView();
+    RoomService roomService = new RoomService();
+    ReservationService reservationService = new ReservationService(new ReservationRepository(), new MemberRepository());
     Scanner scan = new Scanner(System.in);
 
     public void initMain(Member member) {
