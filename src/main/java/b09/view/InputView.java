@@ -1,12 +1,10 @@
 package b09.view;
 
 import b09.model.member.PhoneNumber;
-import b09.model.member.Rank;
 import b09.model.reservation.AdditionalProduct;
 import b09.model.reservation.NumberOfPeople;
 import b09.model.reservation.ReservedDate;
 import b09.model.reservation.RoomNumber;
-import b09.model.room.RoomType;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -46,11 +44,11 @@ public class InputView {
 
             switch (input) { // 입력에 따라 처리
                 case "1":
-                    return RoomType.STANDARD; // STANDARD 반환
+                    return 1; // STANDARD 반환
                 case "2":
-                    return RoomType.PREMIER; // PREMIER 반환
+                    return 2; // PREMIER 반환
                 case "3":
-                    return RoomType.SUITE; // SUITE 반환
+                    return 3; // SUITE 반환
                 case "q":
                     return null; // q 입력 시 null 반환
                 default:

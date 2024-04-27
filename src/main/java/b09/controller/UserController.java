@@ -7,7 +7,6 @@ import b09.model.reservation.AdditionalProduct;
 import b09.model.reservation.NumberOfPeople;
 import b09.model.reservation.ReservedDate;
 import b09.model.reservation.RoomNumber;
-import b09.model.room.RoomType;
 import b09.service.ReservationService;
 import b09.service.RoomService;
 import b09.view.InputView;
@@ -47,10 +46,10 @@ public class UserController {
         ReservedDate reservedDate = inputView.inputReservedDate();
         if(reservedDate == null) return;
         reservedDate.setTodaysDate(todaysDate);
-        RoomType roomType = inputView.inputRoomType();
+        Integer roomType = inputView.inputRoomType();
         if(roomType == null) return;
 
-        List<Room> rooms = roomService.getRoomOfCondition(reservedDate, roomType);
+        List<String> rooms = roomService.getRoomOfCondition(reservedDate, roomType);
         outputView.printAvailableRooms(rooms);
         RoomNumber roomNumber = inputView.inputRoomNumber();
         if(roomNumber == null) return;
