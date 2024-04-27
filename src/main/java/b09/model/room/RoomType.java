@@ -5,5 +5,9 @@ public interface RoomType {
     int PREMIER = 2;
     int SUITE = 3;
 
-    int STANDARD_PRICE = 3214234; // .... 그 밑에도 채워주세욤
+    int STANDARD_PRICE = 100000;
+    int PREMIER_PRICE = 150000;
+    int SUITE_PRICE = 200000;
+
+
 }

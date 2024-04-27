@@ -10,17 +10,54 @@ import b09.model.room.RoomType;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.Scanner;
 // TODO: q를 입력 받으면 종료되는 친구들은 q를 입력 받으면 null을 반환하게 해주세요.
 public class InputView {
     Scanner scan = new Scanner(System.in);
     public LocalDate inputTodaysDate() {    // 요친구는 따로 객체를 안 만들어서 따로 입력 형식에 따른 예외처리 해줘야 합니다. 이 친구도 q들어오면 null 반환
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+
+        while (true) {
+            System.out.println("날짜를 YYMMDD 형식으로 입력하세요. (메인메뉴: q) ");
+            String input = scan.nextLine().trim();
+
+
+            if ("q".equalsIgnoreCase(input)) {
+                return null;
+            }
+
+            try {
+
+                LocalDate todays = LocalDate.parse(input, formatter);
+                return todays;
+            } catch (DateTimeParseException e) {
+                System.out.println("잘못된 날짜 형식입니다. 다시 입력해주세요.(YYMMDD)");
+            }
+        }
     }
 
-    public RoomType inputRoomType() {   // 애도 enum이라서 제대로 사용자가 input주는 지 확인하고 계속 반복 돌려주게 해야도;ㄹ듯
-        return null;
+    public Integer inputRoomType() {   // 제대로 사용자가 input주는 지 확인하고 계속 반복 돌려주게 해야도;ㄹ듯
+
+        while (true) { // 올바른 입력을 받을 때까지 반복
+            System.out.println("객실 유형을 선택해주세요. (1: STANDARD, 2: PREMIER, 3: SUITE, q: 취소)");
+            String input = scan.nextLine(); // 사용자 입력 받기
+
+            switch (input) { // 입력에 따라 처리
+                case "1":
+                    return RoomType.STANDARD; // STANDARD 반환
+                case "2":
+                    return RoomType.PREMIER; // PREMIER 반환
+                case "3":
+                    return RoomType.SUITE; // SUITE 반환
+                case "q":
+                    return null; // q 입력 시 null 반환
+                default:
+                    System.out.println("잘못된 입력입니다. 다시 시도해주세요."); // 잘못된 입력 처리
+                    break;
+            }
+        }
     }
 
     public ReservedDate inputReservedDate() {   // 이런 식으로 try-catch로 원하는 입력이 들어올떄까지 계속 돌릴슈 있음. 참고 하면 좋읅섯 같습니다.
