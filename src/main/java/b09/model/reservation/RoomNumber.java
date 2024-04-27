@@ -7,7 +7,13 @@ public class RoomNumber {
         this.roomNumber = roomNumber;
     }
 
-    private void validate() throws Exception {  // Not a number || 211, 우리는 210호 까지 밖에 없는데... etc.... Validation on reserved room is held on Reservation Service
+    private void validate() throws Exception {
+        int floor = roomNumber / 100;
+        int rooms = roomNumber % 100;
 
+        if (floor < 1 || floor > 10 || rooms < 1 || rooms > 10) {
+            throw new Exception("올바른 객실 번호가 아닙니다.");
+        }
     }
+
 }

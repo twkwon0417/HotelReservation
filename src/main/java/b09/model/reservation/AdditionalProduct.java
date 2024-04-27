@@ -1,10 +1,18 @@
 package b09.model.reservation;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class AdditionalProduct {
+
+    private ReservedDate reservedDate; // getStartDate()를 이용하기 위해 reservedDate 객체 생성해줌
+
+    public AdditionalProduct(ReservedDate reservedDate) {
+        this.reservedDate = reservedDate;
+    }
     private int NumberOfPeople;     // 예약한 사람수 (eg. 최대 6명 방인데 "4"명)
     private int breakfast;
     private int casino;
@@ -20,15 +28,17 @@ public class AdditionalProduct {
         return breakfast;
     }
 
-    public void setBreakfast(int breakfast) {
+    public void setBreakfast(int breakfast, LocalTime localTime) throws Exception {
+        validateBreakfastTime(localTime);
         this.breakfast = breakfast;
+
     }
 
     public int getCasino() {
         return casino;
     }
 
-    public void setCasino(int casino) throws Exception{
+    public void setCasino(int casino) throws Exception {
         this.casino = casino;
     }
 
@@ -37,16 +47,26 @@ public class AdditionalProduct {
     }
 
     public void setSpa(int spa) throws Exception {
-        if(doubleChecked())
-        this.spa = spa;
+        if (doubleChecked())
+            this.spa = spa;
     }
 
-    private void validateOverMax(int numberOfPerson) throws Exception{  // 1: set될 숫자, 2: 인원은 1 이상 6 이하의 자연수만 입력받지만 객실 예약 인원수를 초과할 수 없습니다
-        // private int NumberOfPeople;     // 예약한 사람수 (eg. 최대 6명 방인데 "4"명) 쓰셈
+    private void validateOverMax(int numberOfPerson) throws Exception {
+        if (numberOfPerson < 1 || numberOfPerson > getNumberOfPeople()) { // numberOfPerson은 부가서비스 인원, getNumberOfPeople()은 객실 예약 인원
+            throw new Exception("예약 인원은 1 이상 " + getNumberOfPeople() + " 이하입니다.");
+        }
     }
 
     private void validateBreakfastTime(LocalTime localTime) throws Exception {
+        LocalDate previousDate = reservedDate.getStartDate().minusDays(1); // 예약 시작 날짜의 전날
+        LocalTime limitTime = LocalTime.of(18, 0); // 오후 6시 이전까지만
+        LocalDateTime limitDateTime = LocalDateTime.of(previousDate, limitTime);
 
+        LocalDateTime selectedDateTime = LocalDateTime.of(reservedDate.getStartDate(), localTime);
+
+        if (selectedDateTime.isAfter(limitDateTime)) {
+            throw new Exception("조식 예약은 예약하려는 날의 전날 18시 이전까지만 가능합니다.");
+        }
     }
 
     public int getNumberOfPeople() {
@@ -58,19 +78,20 @@ public class AdditionalProduct {
     }
 
     private boolean doubleChecked() {
-        Scanner scan = new Scanner(System.in);  // 개쓰레기 코드;;;;; ㅈㅅ
+        Scanner scan = new Scanner(System.in);
         int userInput;
         try {
-            System.out.println();       // 예약하시겠습니까? 1.yes 2.no
+            System.out.println("예약하시겠습니까?");
+            System.out.println("1.yes 2.no");
             userInput = scan.nextInt();
         } catch (InputMismatchException e) {
-            System.out.println("숫자 넣어라고");
+            System.out.println("숫자를 입력해주세요.");
             return doubleChecked();
         }
-        if(userInput == 1) return true;
+        if (userInput == 1) return true;
         else if (userInput == 2) return false;
         else {
-            System.out.println("1아니면 2 입력하라고");
+            System.out.println("다시 선택해주세요.");
             return doubleChecked();
         }
     }

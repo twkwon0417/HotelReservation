@@ -7,10 +7,13 @@ public class NumberOfPeople {
 
     public NumberOfPeople(int numberOfPeople) throws Exception {
         this.numberOfPeople = numberOfPeople;
+        validate();
     }
 
-    private void validate() throws Exception {   // 기본적인 예외처리 + 한 방의 max인원보다 많은 경우
-        // Constants.MAX_PERSON_PER_ROOM 활용
+    private void validate() throws Exception {
+        if (numberOfPeople < 1 || numberOfPeople > Constants.MAX_PERSON_PER_ROOM) {
+            throw new Exception("인원 수는 1에서 " + Constants.MAX_PERSON_PER_ROOM + " 사이여야 합니다.");
+        }
     }
 
     public int getInt() {
