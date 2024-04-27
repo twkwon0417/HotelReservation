@@ -4,7 +4,7 @@ import b09.model.member.PhoneNumber;
 import b09.model.member.Rank;
 import java.util.List;
 
-public class Member {
+public class Member { // 아마도 완성
     private Long id;
     private final PhoneNumber phoneNumber;
     private final int totalMoneySpent;
@@ -20,8 +20,8 @@ public class Member {
         this.id = id;
     }
 
-    public Rank getRank() {    // Enum 썼는데 잘 하실거라 미ㅏ
-        return null;
+    public Rank getRank() {
+        return Rank.setRank(this.totalMoneySpent);
     }
 
     public Long getId() {
