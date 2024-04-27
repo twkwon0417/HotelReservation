@@ -101,8 +101,12 @@ public class ManagerController {
             int userReturnInput = inputView.inputReturnToManagerMenu();
             if(userReturnInput == 1) {
                 return;
+            } else if(userReturnInput == 2) {
+                roomManagement(reservation, todaysDate);
+            } else {
+                System.out.println("잘못된 입력입니다.");
+                roomManagement(reservation, todaysDate);
             }
-            initRoomManagement();
         }
     }
 
@@ -147,7 +151,7 @@ public class ManagerController {
         if(userInput == 1) {
             LocalDate newCheckoutDate = inputView.inputNewCheckoutDate();
             try {
-                reservationService.extendCheckoutDate(reservation, todaysDate);     // 요 친구 error메세지!!!! 각 validation마다(한달 넘어, 날짜가 원래 체크아웃보다 작아 등등)
+                reservationService.extendCheckoutDate(reservation, newCheckoutDate);     // 요 친구 error메세지!!!! 각 validation마다(한달 넘어, 날짜가 원래 체크아웃보다 작아 등등)
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 extendStayingDate(reservation, todaysDate);
