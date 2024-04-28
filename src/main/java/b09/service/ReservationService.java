@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReservationService {
     private final ReservationRepository reservationRepository;
@@ -25,12 +26,15 @@ public class ReservationService {
     //한 멤버가 갖고 있는 예약 리스트 반환
     public List<Reservation> getMembersReservation(Member member) {
         List<Integer> reservations = member.getReservations();
-        return reservations.stream().map(x -> reservationRepository.getReservationById(Long.valueOf(x))).toList();
+        return reservations.stream().map(x -> reservationRepository.getReservationById(Long.valueOf(x))).collect(
+                Collectors.toList());
     }
     //새로운 예약이 들어왔을때
     public void registerReservation(Reservation reservation) {
         reservationRepository.registerReservation(reservation);
+        System.out.println(reservation);
         Member memberToBeEdited = memberRepository.getMemberById(reservation.getMemberId());
+//        memberToBeEdited.updateReservation(reservation);
         memberToBeEdited.getReservations().add(Math.toIntExact(reservation.getId()));
         Member newMember = new Member(memberToBeEdited.getPhoneNumber(),
                 memberToBeEdited.getTotalMoneySpent(),

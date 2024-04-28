@@ -64,6 +64,7 @@ public class UserController {
         while(true) {
             int willYouPay = inputView.inputWillYouPay();
             if(willYouPay == 1) {
+                System.out.println(member.getId());
                 Reservation reservation = new Reservation(member.getId(), roomNumber, reservedDate, numberOfPeople, additionalProduct);
                 reservationService.registerReservation(reservation);    // reservation에 memberId있어서 member 따로 안넘겨줘도 됨
                 outputView.printReceipt(reservation, member.getRank(), member);

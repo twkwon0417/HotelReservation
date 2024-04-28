@@ -62,5 +62,17 @@ public class Reservation {
     public LocalDate getCheckOutDate() {
         return reservedDate.getEndDate();
     }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", memberId=" + memberId +
+                ", roomNumber=" + roomNumber +
+                ", reservedDate=" + reservedDate +
+                ", numberOfPeople=" + numberOfPeople +
+                ", additionalProduct=" + additionalProduct +
+                '}';
+    }
 }
 

@@ -8,7 +8,7 @@ public class Member { // 아마도 완성
     private Long id;
     private final PhoneNumber phoneNumber;
     private int totalMoneySpent;
-    private final List<Integer> reservations;
+    private List<Integer> reservations;
 
     public Member (PhoneNumber phoneNumber, int totalMoneySpent, List<Integer> reservations) {
         this.phoneNumber = phoneNumber;

@@ -15,9 +15,31 @@ import static java.lang.Long.parseLong;
 
 public class MemberRepository {
     private static long sequence = 0L; //static
-    ArrayList<Member> members = new ArrayList<>();
+
+    Member member;
+
+    {
+        try {
+            member = new Member(new PhoneNumber("01024159056"),
+                    500,
+                    new ArrayList<>());
+            member.setId(1L);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ArrayList<Member> members = new ArrayList<>();
+
+    private void init(Member member) {
+        members.add(member);
+    }
+
     public Member getMemberById(Long id) {
+        System.out.println(id);
         for(Member member : members){
+            System.out.println(member.getId());
+            System.out.println(id);
             if(Objects.equals(member.getId(), id)){
                 return member;
             }
@@ -25,8 +47,9 @@ public class MemberRepository {
         return null;
     }
     public Member getMemberByPhoneNumber(PhoneNumber phoneNumber) {
+        init(member);
         for(Member member : members){
-            if(member.getPhoneNumber() == phoneNumber){
+            if(Objects.equals(member.getPhoneNumber().getPhoneNumber(), phoneNumber.getPhoneNumber())){
                 return member;
             }
         }
