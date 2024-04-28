@@ -383,16 +383,23 @@ public class InputView {
     }
 
     public LocalDate inputNewCheckoutDate() {
-        String userInput = scan.nextLine();
-//        try {
-//            int year = Integer.parseInt(userInput.substring(0,1) + userInput[1])
-//            return new LocalDate.of(
-//        } catch () {
-//
-//        } catch() {
-//
-//        }
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+
+        while (true) {
+            System.out.println("새로운 checkout 날짜를 YYMMDD 형식으로 입력하세요. (메인메뉴: q) ");
+            String input = scan.nextLine().trim();
+
+
+            if ("q".equalsIgnoreCase(input)) {
+                return null;
+            }
+
+            try {
+                return LocalDate.parse(input, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("잘못된 날짜 형식입니다. 다시 입력해주세요.(YYMMDD)");
+            }
+        }
     }
     public int inputReturnToManagerMenu() {    // 관리자 메뉴로돌아가시겠습니까?1. yes2. no
         System.out.println("로그아웃 하시겠습니까?\n"
