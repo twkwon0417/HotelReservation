@@ -20,7 +20,7 @@ public class MemberRepository {
 
     {
         try {
-            member = new Member(new PhoneNumber("01024159056"),
+            member = new Member(new PhoneNumber("01012345678"),
                     500,
                     new ArrayList<>());
             member.setId(1L);
