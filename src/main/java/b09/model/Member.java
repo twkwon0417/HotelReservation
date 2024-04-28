@@ -25,7 +25,12 @@ public class Member { // 아마도 완성
     }
 
     public void setReservations(List<Integer> reservations){
-        this.reservations = reservations;
+        if(reservations.size() != 0){
+            this.reservations.clear();
+            for (int reservation : reservations){
+                this.reservations.add(reservation); // 기존의 리스트 내용을 비우고 파라미터로 받아온 리스트 내용을 채움.
+            }
+        }
     }
 
     public Rank getRank() {
