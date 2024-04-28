@@ -21,8 +21,8 @@ public class ReservedDate {
             int endYear = Integer.parseInt(twoDates.substring(7, 9));
             int endMonth = Integer.parseInt(twoDates.substring(9, 11));
             int endDay = Integer.parseInt(twoDates.substring(11, 13));
-            this.startDate = LocalDate.of(startYear, startMonth, startDay); // TODO: startyear: 20XX 로 찍게
-            this.endDate = LocalDate.of(endYear, endMonth, endDay);
+            this.startDate = LocalDate.of(2000 + startYear, startMonth, startDay); // TODO: startyear: 20XX 로 찍게
+            this.endDate = LocalDate.of(2000 + endYear, endMonth, endDay);
         } catch (NumberFormatException | DateTimeParseException e) {
             throw new Exception("날짜 형식이 올바르지 않습니다.");
         }
