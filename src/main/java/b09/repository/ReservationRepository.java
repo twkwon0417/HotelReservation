@@ -35,36 +35,36 @@ public class ReservationRepository {
         updateFile();
     }
 
-    public void fileReader(String filename) {
-        try (Scanner file = new Scanner(new File(filename))) {
-            while (file.hasNextLine()) {
-                String line = file.nextLine();
-                String[] parts = line.split("\t");
-                Reservation reservation = new Reservation();
-                reservation.setId(Long.parseLong(parts[0]));
-                reservation.setCustomerIndex(Long.parseLong(parts[1]));
-                reservation.setRoomNumber(parts[2]);
-                reservation.setCheckInDate(parts[3]);
-                reservation.setCheckOutDate(parts[4]);
-                reservation.setNumberOfGuests(Integer.parseInt(parts[5]));
-                reservation.setNumberOfBreakfast(Integer.parseInt(parts[6]));
-                reservation.setNumberOfCasino(Integer.parseInt(parts[7]));
-                reservation.setNumberOfSpa(Integer.parseInt(parts[8]));
-                new Reservation(Long.parseLong(parts[1]),
-                        new RoomNumber(Integer.parseInt(parts[2])),
-                        new ReservedDate(parts[3] + " " + parts[4], LocalDate.of(9999, 12, 31)),
-                        new NumberOfPeople(Integer.parseInt(parts[5])),
-                        new AdditionalProduct()
-                );
-
-                reservations.add(reservation);
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("파일을 찾을 수 없습니다.");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
+//    public void fileReader(String filename) {
+//        try (Scanner file = new Scanner(new File(filename))) {
+//            while (file.hasNextLine()) {
+//                String line = file.nextLine();
+//                String[] parts = line.split("\t");
+//                Reservation reservation = new Reservation();
+//                reservation.setId(Long.parseLong(parts[0]));
+//                reservation.setCustomerIndex(Long.parseLong(parts[1]));
+//                reservation.setRoomNumber(parts[2]);
+//                reservation.setCheckInDate(parts[3]);
+//                reservation.setCheckOutDate(parts[4]);
+//                reservation.setNumberOfGuests(Integer.parseInt(parts[5]));
+//                reservation.setNumberOfBreakfast(Integer.parseInt(parts[6]));
+//                reservation.setNumberOfCasino(Integer.parseInt(parts[7]));
+//                reservation.setNumberOfSpa(Integer.parseInt(parts[8]));
+//                new Reservation(Long.parseLong(parts[1]),
+//                        new RoomNumber(Integer.parseInt(parts[2])),
+//                        new ReservedDate(parts[3] + " " + parts[4], LocalDate.of(9999, 12, 31)),
+//                        new NumberOfPeople(Integer.parseInt(parts[5])),
+//                        new AdditionalProduct()
+//                );
+//
+//                reservations.add(reservation);
+//            }
+//        } catch (FileNotFoundException e) {
+//            System.out.println("파일을 찾을 수 없습니다.");
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
     public void delete(Reservation reservation) {
         reservations.removeIf(r -> r.getId().equals(reservation.getId()));
@@ -76,21 +76,21 @@ public class ReservationRepository {
     }
 
     private void updateFile() {
-        try (BufferedWriter out = new BufferedWriter(new FileWriter("reservations.txt"))) {
-            for (Reservation reservation : reservations) {
-                out.write(reservation.getId() + "\t" +
-                                reservation.getCustomerIndex() + "\t" +
-                                reservation.getRoomNumber() + "\t" +
-                                reservation.getCheckInDate() + "\t" +
-                                reservation.getCheckOutDate() + "\t" +,
-                        reservation.getNumberOfGuests() + "\t" +
-                                reservation.getNumberOfBreakfast() + "\t" +
-                                reservation.getNumberOfCasino() + "\t" +
-                                reservation.getNumberOfSpa());
-                out.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("파일을 업데이트하는데 실패했습니다.");
-        }
+//        try (BufferedWriter out = new BufferedWriter(new FileWriter("reservations.txt"))) {
+//            for (Reservation reservation : reservations) {
+//                out.write(reservation.getId() + "\t" +
+//                                reservation.getCustomerIndex() + "\t" +
+//                                reservation.getRoomNumber() + "\t" +
+//                                reservation.getCheckInDate() + "\t" +
+//                                reservation.getCheckOutDate() + "\t" +,
+//                        reservation.getNumberOfGuests() + "\t" +
+//                                reservation.getNumberOfBreakfast() + "\t" +
+//                                reservation.getNumberOfCasino() + "\t" +
+//                                reservation.getNumberOfSpa());
+//                out.newLine();
+//            }
+//        } catch (IOException e) {
+//            System.out.println("파일을 업데이트하는데 실패했습니다.");
+//        }
     }
 }

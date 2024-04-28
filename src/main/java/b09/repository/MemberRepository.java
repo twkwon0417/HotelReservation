@@ -7,6 +7,7 @@ import b09.model.member.PhoneNumber;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -17,7 +18,7 @@ public class MemberRepository {
     ArrayList<Member> members = new ArrayList<>();
     public Member getMemberById(Long id) {
         for(Member member : members){
-            if(member.getId() == id){
+            if(Objects.equals(member.getId(), id)){
                 return member;
             }
         }
@@ -25,7 +26,7 @@ public class MemberRepository {
     }
     public Member getMemberByPhoneNumber(PhoneNumber phoneNumber) {
         for(Member member : members){
-            if(member.getPhoneNumber() == phoneNumber){
+            if(Objects.equals(member.getPhoneNumber().getPhoneNumber(), phoneNumber.getPhoneNumber())){
                 return member;
             }
         }
@@ -57,7 +58,7 @@ public class MemberRepository {
 
         fileReader("./clientInfo.txt");
         for (int i = 0; i < members.size();i++){
-            if(members.get(i).getId() == memberToBeEdited.getId()){
+            if(Objects.equals(members.get(i).getId(), memberToBeEdited.getId())){
                 members.get(i).setTotalMoneySpent(newMember.getTotalMoneySpent());
                 members.get(i).setReservations(newMember.getReservations());
             }
