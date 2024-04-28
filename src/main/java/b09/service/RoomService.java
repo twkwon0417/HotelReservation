@@ -14,16 +14,13 @@ public class RoomService{
     public final Integer PREMIER = 2;
     public final Integer SUITE = 3;
     ReservationRepository repository;
+    Reservation reservation;
 
-    public boolean[][] hotelrooms = {
-            // 내가 제한을 걸고 싶은 방은 수작업으로 해당 인덱스 부분 false라고 수정한다
-            // standard
-            {true, true, true, true, true, true, true, true, true, true},
-            // premier
+    public static boolean[][] hotelrooms = {
             {true, true, true, true, true, true, true, true, true, true},
             {true, true, true, true, true, true, true, true, true, true},
             {true, true, true, true, true, true, true, true, true, true},
-            // suite
+            {true, true, true, true, true, true, true, true, true, true},
             {true, true, true, true, true, true, true, true, true, true},
             {true, true, true, true, true, true, true, true, true, true},
             {true, true, true, true, true, true, true, true, true, true},
@@ -33,20 +30,19 @@ public class RoomService{
 
     public List<String> getRoomOfCondition(ReservedDate reservedDate, Integer roomType) {
         List<String> availableRooms = new ArrayList<>();
-        LocalDate today = reservedDate.getTodaysDate(); // 요 메소드 뭔가 추가하면 좋을거같아요
-        LocalDate oneMonthLater = today.plusMonths(1); // 한 달 후의 날짜
+        LocalDate userCheckInDate = reservedDate.getStartDate(); // 사용자가 입력한 체크인 날짜
+        LocalDate userCheckOutDate = reservedDate.getEndDate(); // 사용자가 입력한 체크아웃 날짜
 
-        List<Reservation> hasReservations = repository.findAll();
+        List<Reservation> reservedlist = repository.findAll();
 
-        // 한 달 이내의 예약이 있는 방을 찾아서 해당 방을 사용할 수 없도록 설정
-        for (Reservation reservation : hasReservations) {
-            LocalDate checkInDate = reservation.getCheckInDate(); // 요 메소드 뭔가 추가하면 좋을거같아요
-            LocalDate checkOutDate = reservation.getCheckOutDate(); // 요 메소드 뭔가 추가하면 좋을거같아요
+        for (Reservation reservation : reservedlist) {
+            LocalDate checkInDate = reservation.getCheckInDate();
+            LocalDate checkOutDate = reservation.getCheckOutDate();
 
-            // 예약 날짜가 사용자가 입력한 날짜로부터 한 달 이내인지 확인
-            if (!(checkOutDate.isBefore(today) || checkInDate.isAfter(oneMonthLater))) {
-                int floor = reservation.getRoomNumber().ofInt() / 100 - 2;
-                int roomNum = reservation.getRoomNumber().ofInt() % 100;
+            if (!userCheckOutDate.isBefore(checkInDate) && !userCheckInDate.isAfter(checkOutDate)) {
+                int roomNumber = reservation.getRoomNumber().ofInt();
+                int floor = roomNumber / 100 - 1;
+                int roomNum = roomNumber % 100 - 1;
                 hotelrooms[floor][roomNum] = false;
             }
         }
@@ -76,6 +72,5 @@ public class RoomService{
         }
 
         return availableRooms;
-//        return List.of("101", "102");
     }
 }
