@@ -61,6 +61,7 @@ public class ManagerController {
             System.out.println(e.getMessage());
             changeMemberRank(member);
         }
+        System.out.println("등급 수정이 완료 되었습니다.");
     }
     private void initRoomManagement() {
         LocalDate todaysDate= inputView.inputTodaysDate();
@@ -74,7 +75,7 @@ public class ManagerController {
         RoomNumber roomNumber = inputView.inputRoomNumber();
 
         // 해당 날짜에 예약된 방들중 해당 방번호인 예약을 찾는 코드 입니다.
-        Optional<Reservation> matchingReservation = reservations.stream().filter(x -> x.getRoomNumber() == roomNumber).findAny();
+        Optional<Reservation> matchingReservation = reservations.stream().filter(x -> x.getRoomNumber().ofInt() == roomNumber.ofInt()).findAny();
         if(matchingReservation.isEmpty()) {
             outputView.printNoMatchingRoomNumberOfDate();
             return;
