@@ -244,9 +244,12 @@ public class InputView {
         }
     }
 
-    public PhoneNumber inputPhoneNumber() { // exception catch -> recursion,  q일 경우 null 반환   Phonenumber는 constructor에서 throws Exception
+    public PhoneNumber inputPhoneNumber() throws Exception { // exception catch -> recursion,  q일 경우 null 반환   Phonenumber는 constructor에서 throws Exception
         System.out.println("전화번호를 입력해 로그인 해주세요.(종료하려면 q를 입력해주세요)");
         String userInput = scan.nextLine();
+        if (Objects.equals(userInput, "B09")) {
+            throw new Exception("매니져요");
+        }
         try {
             if(Objects.equals(userInput, "q")) {
                 return null;
@@ -468,6 +471,7 @@ public class InputView {
     }
 
     public String inputChangeRankCommand() {
+        System.out.println("바꾸실 등급을 입력해주세요");
         return scan.nextLine();
     }
 }
