@@ -7,6 +7,7 @@ import b09.model.member.PhoneNumber;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -17,7 +18,7 @@ public class MemberRepository {
     ArrayList<Member> members = new ArrayList<>();
     public Member getMemberById(Long id) {
         for(Member member : members){
-            if(member.getId() == id){
+            if(Objects.equals(member.getId(), id)){
                 return member;
             }
         }
@@ -32,63 +33,16 @@ public class MemberRepository {
         return null;
     }
 
-
-    public void fileReader(String filename) {
-        try (Scanner file = new Scanner(new File(filename));) {
-            int count = 0;
-            while (file.hasNextLine()) {
-                String str = file.nextLine();
-                String[] result = str.split("\t"); // 탭을 기준으로 분리
-                ArrayList<Integer> reservationList = new ArrayList<>();
-                for(int i = 3; i< result.length; i++){
-                    reservationList.add(parseInt(result[i]));
-                }
-                members.add(new Member(new PhoneNumber(result[1]), parseInt(result[2]), reservationList));
-                members.get(count).setId(parseLong(result[0]));
-                count++;
-            }
-        } catch (Exception e) {
-            System.out.println("파일을 찾을 수 없습니다.");
-        }
-    }
     public void editMember(Member memberToBeEdited, Member newMember) { // 디비 접근법 알아내기
         // 절대 db(txt)파일 수정해
         // 1: 피 수정자 2: 이 객체의 정보로 바꿔줘
 
-        fileReader("clientInfo.txt");
         for (int i = 0; i < members.size();i++){
             if(members.get(i).getId() == memberToBeEdited.getId()){
                 members.get(i).setTotalMoneySpent(newMember.getTotalMoneySpent());
             }
         } // 자 여기까지 함으로써 멤버 정보 수정 완료.
 
-        File file = new File("clientInfo.txt");
-        if (file.exists()) {
-            file.delete();
-        }
-        try {   // 일단 임시방편 여기서 Exception Handling 해주세여
-            file.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("clientInfo.txt"));
-
-            // 아래는 데이터파일 형식에 맞게 멤버 정보 정리 후, 파일에 적는 부분.
-            for (Member member : members) {
-                String memberInfo = member.getId() + "\t" + member.getPhoneNumber() + "\t" +
-                        member.getTotalMoneySpent() + "\t";
-                for(int i = 0; i < member.getReservations().size(); i++){
-                    memberInfo += member.getReservations().get(i);
-                    memberInfo += "\t";
-                }
-                writer.write(memberInfo + "\n");
-            }
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
 
         //ToDO: 1. public List<String[]> readClientsFromFile(String filename)를 호출해서 clientList를 가져옴

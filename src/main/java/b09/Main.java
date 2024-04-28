@@ -8,6 +8,8 @@ import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
+
+
         HomeController homeController = new HomeController();
         ManagerController managerController = new ManagerController();
         UserController userController = new UserController();
