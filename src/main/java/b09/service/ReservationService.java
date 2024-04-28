@@ -24,8 +24,7 @@ public class ReservationService {
 
     //한 멤버가 갖고 있는 예약 리스트 반환
     public List<Reservation> getMembersReservation(Member member) {
-        List<Integer> reservations = member.getReservations();
-        return reservations.stream().map(x -> reservationRepository.getReservationById(Long.valueOf(x))).toList();
+        return reservationRepository.getReservationByMemberId(member.getId());
     }
     //새로운 예약이 들어왔을때
     public void registerReservation(Reservation reservation) {

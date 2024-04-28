@@ -118,11 +118,11 @@ public class UserController {
     private void deleteReservation(List<Reservation> reservations) {
         System.out.print("취소할 객실 목록의 번호 입력");
         try {
-            int idx = scan.nextInt() - 1;
+            int idx = Integer.parseInt(scan.nextLine()) - 1;
             Reservation reservationToBeDeleted = reservations.get(idx);
             if(inputView.inputYesOrNo() == 2) return;
             reservationService.deleteReservation(reservationToBeDeleted);
-        } catch (InputMismatchException e) {
+        } catch (NumberFormatException e) {
             System.out.println("숫자를 입력해주세요");
             deleteReservation(reservations);
         } catch (IndexOutOfBoundsException e) {

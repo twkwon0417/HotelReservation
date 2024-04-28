@@ -95,4 +95,17 @@ public class ReservationRepository {
             System.out.println("파일을 업데이트하는데 실패했습니다.");
         }
     }
+
+    public List<Reservation> getReservationByMemberId(Long memberId) {
+        List<Reservation> ret = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getMemberId().equals(memberId)) {
+                ret.add(reservation);
+            }
+        }
+        if(ret.isEmpty()) {
+            return null;
+        }
+        return ret;
+    }
 }
