@@ -100,30 +100,27 @@ public class InputView {
         }
     }
 
-    public RoomNumber inputSpecificRoomNumber(List<String> availableRooms) {   // q입력 받으면 null반환
+    public RoomNumber inputSpecificRoomNumber(List<String> availableRooms) {
         System.out.println("예약할 객실의 호수를 입력해주세요. (메인메뉴 : q)");
         System.out.print("> ");
         String userInput = scan.nextLine();
+        if (Objects.equals(userInput, "q")) {
+            return null;
+        }
         try {
-            if (Objects.equals(userInput, "q")) {
-                return null;
-            }
             int userIntInput = Integer.parseInt(userInput);
-            for(String roomNumbers : availableRooms) {
-                if(userInput.equals(roomNumbers)) {
-                    break;
+            for (String roomNumber : availableRooms) {
+                if (userInput.equals(roomNumber)) {
+                    return new RoomNumber(userIntInput);
                 }
-                throw new Exception("보여준 예약 가능한 방들중 하나를 입력해주세요");
             }
-            return new RoomNumber(userIntInput);
+            throw new Exception("보여준 예약 가능한 방들 중 하나를 입력해주세요.");
         } catch (NumberFormatException e) {
             System.out.println("숫자를 입력 해주세요.");
-            System.out.print("> ");
-            return inputSpecificRoomNumber(availableRooms);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return inputSpecificRoomNumber(availableRooms);
         }
+        return inputSpecificRoomNumber(availableRooms);
     }
 
     public NumberOfPeople inputNumberOfPeople() {

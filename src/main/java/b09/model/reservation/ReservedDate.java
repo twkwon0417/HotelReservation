@@ -64,7 +64,7 @@ public class ReservedDate {
     }
 
     private void validateCheckinAfterMonth() throws Exception {
-        LocalDate oneMonthAfter = todaysDate.withDayOfMonth(1).plusMonths(1).minusDays(1); // 지금 월에서 다음 달로 이동 + 일 수는 하루 뺌
+        LocalDate oneMonthAfter = todaysDate.plusMonths(1).minusDays(1); // 지금 월에서 다음 달로 이동
         if (startDate.isAfter(oneMonthAfter)) {
             throw new Exception("체크인일은 오늘로부터 1달 이내여야 합니다.");
         }
