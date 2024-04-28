@@ -5,14 +5,18 @@ import b09.model.member.PhoneNumber;
 import b09.repository.MemberRepository;
 import b09.service.MemberService;
 import b09.view.InputView;
-import java.util.Objects;
 
 public class HomeController {
     MemberService memberService = new MemberService(new MemberRepository());
     InputView inputView = new InputView();
 
     public Member init() {
-        PhoneNumber phoneNumber = inputView.inputPhoneNumber();
+        PhoneNumber phoneNumber = null;
+        try {
+            phoneNumber = inputView.inputPhoneNumber();
+        } catch (Exception e) {
+            return null;
+        }
         if (phoneNumber == null) {  // q를 누른 경우임
             int userInput = inputView.inputKillProgram();
             if (userInput == 1) {    // 진짜 종료
