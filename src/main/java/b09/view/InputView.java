@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 // TODO: q를 입력 받으면 종료되는 친구들은 q를 입력 받으면 null을 반환하게 해주세요.
@@ -90,6 +91,30 @@ public class InputView {
         }
     }
 
+    public RoomNumber inputSpecificRoomNumber(List<String> availableRooms) {   // q입력 받으면 null반환
+        System.out.println("방번호를 입력해주세요");
+        String userInput = scan.nextLine();
+        try {
+            if (Objects.equals(userInput, "q")) {
+                return null;
+            }
+            int userIntInput = Integer.parseInt(userInput);
+            for(String roomNumbers : availableRooms) {
+                if(userInput.equals(roomNumbers)) {
+                    break;
+                }
+                throw new Exception("보여준 예약 가능한 방들중 하나를 입력해주세여");
+            }
+            return new RoomNumber(userIntInput);
+        } catch (NumberFormatException e) {
+            System.out.println("숫자를 입력 해주세요.");
+            return inputSpecificRoomNumber(availableRooms);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return inputSpecificRoomNumber(availableRooms);
+        }
+    }
+
     public NumberOfPeople inputNumberOfPeople() {
         System.out.println("인원수르 입력해주세요");
         String userInput = scan.nextLine();
@@ -159,6 +184,16 @@ public class InputView {
             System.out.println("유효한 시간 값이 아닙니다.");
             inputBreakfast(additionalProduct);
             return;
+        }
+        System.out.println("밥 먹을 인원수를 입력해주세요");
+        try {
+            additionalProduct.setBreakfast(Integer.parseInt(scan.nextLine()), localTime);
+        } catch (NumberFormatException e) {
+            System.out.println("숫자가 아닙니다.");
+            inputBreakfast(additionalProduct);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            inputBreakfast(additionalProduct);
         }
         // 합치고 생각하자.
     }

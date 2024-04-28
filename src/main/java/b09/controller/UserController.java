@@ -2,7 +2,6 @@ package b09.controller;
 
 import b09.model.Member;
 import b09.model.Reservation;
-import b09.model.Room;
 import b09.model.reservation.AdditionalProduct;
 import b09.model.reservation.NumberOfPeople;
 import b09.model.reservation.ReservedDate;
@@ -53,12 +52,12 @@ public class UserController {
 
         List<String> rooms = roomService.getRoomOfCondition(reservedDate, roomType);
         outputView.printAvailableRooms(rooms);
-        RoomNumber roomNumber = inputView.inputRoomNumber();
+        RoomNumber roomNumber = inputView.inputSpecificRoomNumber(rooms);
         if(roomNumber == null) return;
 
         NumberOfPeople numberOfPeople = inputView.inputNumberOfPeople();
 
-        AdditionalProduct additionalProduct = assembleAdditionalProduct(new AdditionalProduct(), numberOfPeople);
+        AdditionalProduct additionalProduct = assembleAdditionalProduct(new AdditionalProduct(reservedDate), numberOfPeople);
         if(additionalProduct == null) return;
 
         while(true) {
@@ -90,9 +89,9 @@ public class UserController {
             } else if (selectedInt == 1) {
                 inputView.inputCasino(additionalProduct);
             } else if (selectedInt == 2) {
-                inputView.inputBreakfast(additionalProduct);
-            } else if (selectedInt == 3) {
                 inputView.inputSpa(additionalProduct);
+            } else if (selectedInt == 3) {
+                inputView.inputBreakfast(additionalProduct);
             } else if (selectedInt == -1) { // -1은 q를 의미합니다. InputVIew의 Line 41 참고
                 return null;
             } else {
