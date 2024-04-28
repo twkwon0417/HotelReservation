@@ -1,6 +1,7 @@
 package b09.model.reservation;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class ReservedDate {
@@ -68,7 +69,6 @@ public class ReservedDate {
             throw new Exception("체크인일은 오늘로부터 1달 이내여야 합니다.");
         }
     }
-
     public void setTodaysDate(LocalDate todaysDate) {
         this.todaysDate = todaysDate;
     }
@@ -83,5 +83,11 @@ public class ReservedDate {
 
     public LocalDate getEndDate() {
         return endDate;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return "예약 시작일: " + startDate.format(formatter) + ", 예약 종료일: " + endDate.format(formatter);
     }
 }

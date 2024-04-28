@@ -1,7 +1,11 @@
 package b09.model.reservation;
 
+import java.time.LocalDate;
+
 public class RoomNumber {
     private int roomNumber;
+    private ReservedDate reservedDate;
+
 
     public RoomNumber(int roomNumber) throws Exception{
         this.roomNumber = roomNumber;
@@ -20,7 +24,24 @@ public class RoomNumber {
         }
     }
 
+    public LocalDate getCheckInDate() {
+        return reservedDate.getStartDate();
+    }
+
+    public LocalDate getCheckOutDate() {
+        return reservedDate.getEndDate();
+    }
+
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
     public int ofInt() {
         return this.roomNumber;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d", roomNumber); // 객실 번호를 문자열로 반환
     }
 }

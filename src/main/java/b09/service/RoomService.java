@@ -2,6 +2,7 @@ package b09.service;
 
 import b09.model.Reservation;
 import b09.model.reservation.ReservedDate;
+import b09.model.reservation.RoomNumber;
 import b09.repository.ReservationRepository;
 
 import java.time.LocalDate;
@@ -13,8 +14,10 @@ public class RoomService{
     public final Integer STANDARD = 1;
     public final Integer PREMIER = 2;
     public final Integer SUITE = 3;
-    ReservationRepository repository;
-    Reservation reservation;
+    private ReservationRepository repository;
+    public RoomService() {
+        this.repository = new ReservationRepository();
+    }
 
     public static boolean[][] hotelrooms = {
             {true, true, true, true, true, true, true, true, true, true},
@@ -33,14 +36,14 @@ public class RoomService{
         LocalDate userCheckInDate = reservedDate.getStartDate(); // 사용자가 입력한 체크인 날짜
         LocalDate userCheckOutDate = reservedDate.getEndDate(); // 사용자가 입력한 체크아웃 날짜
 
-        List<Reservation> reservedlist = repository.findAll();
+        List<RoomNumber> reservedRoomNumbers = repository.findAllRoomNumbers();
 
-        for (Reservation reservation : reservedlist) {
+        for (RoomNumber reservation : reservedRoomNumbers) {
             LocalDate checkInDate = reservation.getCheckInDate();
             LocalDate checkOutDate = reservation.getCheckOutDate();
 
             if (!userCheckOutDate.isBefore(checkInDate) && !userCheckInDate.isAfter(checkOutDate)) {
-                int roomNumber = reservation.getRoomNumber().ofInt();
+                int roomNumber = reservation.getRoomNumber();
                 int floor = roomNumber / 100 - 1;
                 int roomNum = roomNumber % 100 - 1;
                 hotelrooms[floor][roomNum] = false;
@@ -66,7 +69,7 @@ public class RoomService{
         for (int floor = startFloor; floor <= endFloor; floor++) {
             for (int roomNum = 0; roomNum < hotelrooms[floor].length; roomNum++) {
                 if (hotelrooms[floor][roomNum]) {
-                    availableRooms.add((floor+2) + "0" + (roomNum+1)); // 아 근데 10호면 2010호 이렇게 되네요...
+                    availableRooms.add((floor+2) + "0" + (roomNum+1));
                 }
             }
         }

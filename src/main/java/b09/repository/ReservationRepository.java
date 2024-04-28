@@ -67,6 +67,14 @@ public class ReservationRepository {
         fileReader2("reservationInfo.txt");
         return new ArrayList<>(reservations);
     }
+    public List<RoomNumber> findAllRoomNumbers() {
+        fileReader2("reservationInfo.txt");
+        List<RoomNumber> roomNumbers = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            roomNumbers.add(reservation.getRoomNumber());
+        }
+        return roomNumbers;
+    }
 
     private void updateFile() {
         try (BufferedWriter out = new BufferedWriter(new FileWriter("reservationInfo.txt"))) {

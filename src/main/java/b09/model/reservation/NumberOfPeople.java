@@ -19,4 +19,9 @@ public class NumberOfPeople {
     public int getInt() {
         return this.numberOfPeople;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(numberOfPeople);
+    }
 }

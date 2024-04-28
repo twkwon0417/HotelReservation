@@ -103,4 +103,10 @@ public class AdditionalProduct {
             return doubleChecked();
         }
     }
+    @Override
+    public String toString() {
+        return "breakfast=" + breakfast +
+                ", casino=" + casino +
+                ", spa=" + spa;
+    }
 }

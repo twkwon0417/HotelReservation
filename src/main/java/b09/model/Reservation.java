@@ -70,11 +70,9 @@ public class Reservation {
     public LocalDate getCheckInDate() {
         return reservedDate.getStartDate();
     }
-
     public LocalDate getCheckOutDate() {
         return reservedDate.getEndDate();
     }
-
     public int getBreakfast() {
         return additionalProduct.getBreakfast();
     }
