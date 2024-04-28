@@ -8,6 +8,7 @@ import b09.repository.MemberRepository;
 import b09.repository.ReservationRepository;
 import b09.service.MemberService;
 import b09.service.ReservationService;
+import b09.service.RoomService;
 import b09.view.InputView;
 import b09.view.OutputView;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class ManagerController {
     OutputView outputView = new OutputView();
     ReservationService reservationService = new ReservationService(new ReservationRepository(), new MemberRepository());
     MemberService memberService = new MemberService(new MemberRepository());
+    RoomService roomService = new RoomService();
 
     public void initMain() {
         int userInput = inputView.inputManagerPage();
@@ -141,6 +143,7 @@ public class ManagerController {
         int userInput = inputView.inputRoomRestricted();
         if(userInput == 1) {
 //            reservationService.       // 일단 보류
+            roomService.restrictRoom(reservation);
             outputView.printRoomRestricted();
         } else if (userInput == 2) {
             roomManagement(reservation, todaysDate);
