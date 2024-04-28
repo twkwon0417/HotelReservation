@@ -2,7 +2,6 @@ package b09.view;
 
 import b09.model.Member;
 import b09.model.Reservation;
-import b09.model.Room;
 import b09.model.member.Rank;
 import b09.model.room.Constants;
 
@@ -16,9 +15,9 @@ public class OutputView {
             System.out.println("-------------- 객실 목록 --------------");
             for (int i = 0; i < rooms.size(); i++) {
                 System.out.print(rooms.get(i) + " ");
-
+                // 10개의 객실을 출력한 후 다음 줄로 넘어가도록 합니다.
                 if ((i + 1) % 10 == 0) {
-                    System.out.println();
+                    System.out.println(); // 줄바꿈
                 }
             }
 
@@ -30,7 +29,7 @@ public class OutputView {
     public void printReceipt(Reservation reservation, Rank rank, Member member, Integer roomType) {
 
         // 예약 내역이랑 토탈 금액 출력해 마지막 예약 완료때 띄어주는 문구 입니다. //
-        double totalAmount = 0.0;
+        double totalAmount = 0;
         double discountRate = 0.0; // 할인율 초기값 설정
 
         if (roomType == 1) {
@@ -41,9 +40,14 @@ public class OutputView {
             totalAmount += 200000; // SUITE
         }
 
-        totalAmount += reservation.getAdditionalProduct().getBreakfast() * Constants.EXTRA_FEE;
         totalAmount += reservation.getAdditionalProduct().getCasino() * Constants.CASINO_PRICE;
         totalAmount += reservation.getAdditionalProduct().getSpa() * Constants.SPA_PRICE;
+
+        int numberOfPeople = reservation.getNumberOfPeople().getInt();
+        if (numberOfPeople > Constants.DEFAULT_PER_ROOM) {
+            int extraPeople = numberOfPeople - Constants.DEFAULT_PER_ROOM;
+            totalAmount += extraPeople * Constants.EXTRA_FEE;
+        }
 
         //할인율 적용
         switch (rank) {
@@ -70,6 +74,7 @@ public class OutputView {
 
         System.out.println("--------------- 예약 내역 ---------------");
         System.out.println("전체 예약 비용은 " + finalAmount + "원 입니다.");
+        System.out.println("현장에서 결제 부탁드립니다.");
         System.out.println("---------------------------------------");
     }
 
@@ -78,18 +83,12 @@ public class OutputView {
     }
 
     public void printReservation(List<Reservation> reservations) { // 회원이 조회 하고 예약이 있으면 보여줄 화면
-        if (reservations == null || reservations.isEmpty()) {
-            System.out.println("고객님의 예약 내역이 없습니다.");
-            return;
+        System.out.println("--------------- 예약 목록 ---------------");
+        for (int i = 0; i < reservations.size(); i++) {
+            Reservation reservation = reservations.get(i);
+            System.out.println((i + 1) + ". 객실 호수: " + reservation.getRoomNumber() + ", 예약 날짜: " + reservation.getReservedDate());
         }
-
-        System.out.println("--------------- 예약 내역 ---------------");
-        int index = 1; // 예약 내역 번호 인덱스
-        for (Reservation reservation : reservations) {
-            System.out.printf("%d. 예약자 ID: %s, 객실 호수: %s, 예약 날짜: %s\n",
-                    index++, reservation.getMemberId(), reservation.getRoomNumber(), reservation.getReservedDate());
-        }
-
+        System.out.println("---------------------------------------");
     }
 
     public void printNoMatchingRoomNumberOfDate() { // 관리자모드에서 객실을 찾는데 해당 날짜에 해당 번호의 객실이 없는 경우 나온는 화면

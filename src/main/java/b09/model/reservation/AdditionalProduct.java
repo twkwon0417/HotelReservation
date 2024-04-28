@@ -34,7 +34,6 @@ public class AdditionalProduct {
     public void setBreakfast(int breakfast, LocalTime localTime) throws Exception {
         validateBreakfastTime(localTime);
         this.breakfast = breakfast;
-
     }
 
     public int getCasino() {
@@ -65,16 +64,12 @@ public class AdditionalProduct {
         }
     }
 
-    private void validateBreakfastTime(LocalTime localTime) throws Exception {
+    private void validateBreakfastTime(LocalTime localTime){
         LocalDate previousDate = reservedDate.getStartDate().minusDays(1); // 예약 시작 날짜의 전날
         LocalTime limitTime = LocalTime.of(18, 0); // 오후 6시 이전까지만
         LocalDateTime limitDateTime = LocalDateTime.of(previousDate, limitTime);
-
         LocalDateTime selectedDateTime = LocalDateTime.of(reservedDate.getStartDate(), localTime);
 
-        if (selectedDateTime.isAfter(limitDateTime)) {
-            throw new Exception("조식 예약은 예약하려는 날의 전날 18시 이전까지만 가능합니다.");
-        }
     }
 
     public int getNumberOfPeople() {

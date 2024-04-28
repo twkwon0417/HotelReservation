@@ -5,6 +5,8 @@ import b09.model.reservation.AdditionalProduct;
 import b09.model.reservation.NumberOfPeople;
 import b09.model.reservation.ReservedDate;
 import b09.model.reservation.RoomNumber;
+
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -123,6 +125,7 @@ public class InputView {
         return inputSpecificRoomNumber(availableRooms);
     }
 
+
     public NumberOfPeople inputNumberOfPeople() {
         System.out.println("인원 수를 입력해주세요.(기본 4인, 최대 6인 입니다.) (메인메뉴 : q)");
         System.out.print("> ");
@@ -181,39 +184,70 @@ public class InputView {
         }
     }
 
-    public void inputBreakfast(AdditionalProduct additionalProduct) {   // 이 친구는 시간까지 입력 받고 validation 하나 더 있음!!!!!, 둘의 Exception을 다르게 해서 처리하면 깔끔할듯
-        System.out.println("현재 시간을 입력해주세요");
+    public void inputBreakfast(AdditionalProduct additionalProduct) {
+        System.out.println("현재 시간을 입력해주세요.");
         System.out.print("> ");
         String userInput = scan.nextLine();
         LocalTime localTime;
+
         try {
-            localTime = LocalTime.of(Integer.parseInt(userInput.substring(0, 2))
-                    , Integer.parseInt(userInput.substring(2, 4)));
+            int hour = Integer.parseInt(userInput.substring(0, 2));
+            int minute = Integer.parseInt(userInput.substring(2, 4));
+            localTime = LocalTime.of(hour, minute);
+
+            // 입력된 시간이 0시부터 18시 사이인지 검증
+            if (hour < 0 || hour > 18) {
+                throw new IllegalArgumentException("현재 조식 예약이 가능한 시간이 아닙니다. 다음에 이용해주세요.\n");
+            }
         } catch (NumberFormatException e) {
-            System.out.println("숫자만 입력해주세요");
-            System.out.print("> ");
+            System.out.println("숫자만 입력해주세요.");
             inputBreakfast(additionalProduct);
             return;
-        } catch (Exception e) {
-            System.out.println("유효한 시간 값이 아닙니다.");
-            System.out.print("> ");
-            inputBreakfast(additionalProduct);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
             return;
         }
+
         System.out.println("조식 서비스를 이용하실 인원 수를 입력해주세요.");
         System.out.print("> ");
+        int numberOfPeople;
         try {
-            additionalProduct.setBreakfast(Integer.parseInt(scan.nextLine()), localTime);
+            numberOfPeople = Integer.parseInt(scan.nextLine());
+            // 예약 인원 수를 초과하는지 검증
+            if (numberOfPeople > additionalProduct.getNumberOfPeople()) {
+                throw new IllegalArgumentException("예약 인원 수를 초과하였습니다. 다시 입력해주세요.\n");
+            }
         } catch (NumberFormatException e) {
-            System.out.println("숫자가 아닙니다.");
-            System.out.print("> ");
+            System.out.println("숫자만 입력해주세요.");
             inputBreakfast(additionalProduct);
-        } catch (Exception e) {
+            return;
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
+            inputBreakfast(additionalProduct); // 인원 수 재입력을 위해 다시 호출
+            return;
+        }
+
+        System.out.println("해당 인원 수 만큼 조식을 예약하시겠습니까?");
+        System.out.println("1. yes 2. no");
+        System.out.print("> ");
+        String response = scan.nextLine();
+        if ("1".equals(response)) {
+            try {
+                additionalProduct.setBreakfast(numberOfPeople, localTime);
+                System.out.println("* 예약이 완료되었습니다. 조식 이용 가능 시간대는 7:00 ~ 11:00 입니다. *");
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                inputBreakfast(additionalProduct);
+            }
+        } else if ("2".equals(response)) {
+            System.out.println("조식 예약이 취소되었습니다.");
+            inputAdditionalProductMenu(); // 다른 메뉴로 돌아가는 메소드 호출
+        } else {
+            System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
             inputBreakfast(additionalProduct);
         }
-        // 합치고 생각하자.
     }
+
 
     public void inputCasino(AdditionalProduct additionalProduct) {
         System.out.println("카지노 서비스를 이용하실 인원 수를 입력해주세요.");
