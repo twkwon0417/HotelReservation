@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 // TODO: q를 입력 받으면 종료되는 친구들은 q를 입력 받으면 null을 반환하게 해주세요.
@@ -90,6 +91,30 @@ public class InputView {
         }
     }
 
+    public RoomNumber inputSpecificRoomNumber(List<String> availableRooms) {   // q입력 받으면 null반환
+        System.out.println("방번호를 입력해주세요");
+        String userInput = scan.nextLine();
+        try {
+            if (Objects.equals(userInput, "q")) {
+                return null;
+            }
+            int userIntInput = Integer.parseInt(userInput);
+            for(String roomNumbers : availableRooms) {
+                if(userInput.equals(roomNumbers)) {
+                    break;
+                }
+                throw new Exception("보여준 예약 가능한 방들중 하나를 입력해주세여");
+            }
+            return new RoomNumber(userIntInput);
+        } catch (NumberFormatException e) {
+            System.out.println("숫자를 입력 해주세요.");
+            return inputSpecificRoomNumber(availableRooms);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return inputSpecificRoomNumber(availableRooms);
+        }
+    }
+
     public NumberOfPeople inputNumberOfPeople() {
         System.out.println("인원수르 입력해주세요");
         String userInput = scan.nextLine();
@@ -108,7 +133,7 @@ public class InputView {
         }
     }
 
-    public int inputAdditionalProductMenu() {  
+    public int inputAdditionalProductMenu() {
         System.out.println("신청하실 서비스 번호를 입력해주세요. (메인메뉴 : q)\n"
                 + "1. 카지노 예약 (1인 50,000원)\n"
                 + "2. 스파 예약 (1인 30,000원)\n"
@@ -127,7 +152,7 @@ public class InputView {
         } else if (Objects.equals(userInput, "q")) {
             return -1;
         } else {
-            return 0;  
+            return 0;
         }
     }
 
@@ -159,6 +184,16 @@ public class InputView {
             System.out.println("유효한 시간 값이 아닙니다.");
             inputBreakfast(additionalProduct);
             return;
+        }
+        System.out.println("밥 먹을 인원수를 입력해주세요");
+        try {
+            additionalProduct.setBreakfast(Integer.parseInt(scan.nextLine()), localTime);
+        } catch (NumberFormatException e) {
+            System.out.println("숫자가 아닙니다.");
+            inputBreakfast(additionalProduct);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            inputBreakfast(additionalProduct);
         }
         // 합치고 생각하자.
     }
@@ -383,16 +418,23 @@ public class InputView {
     }
 
     public LocalDate inputNewCheckoutDate() {
-        String userInput = scan.nextLine();
-//        try {
-//            int year = Integer.parseInt(userInput.substring(0,1) + userInput[1])
-//            return new LocalDate.of(
-//        } catch () {
-//
-//        } catch() {
-//
-//        }
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+
+        while (true) {
+            System.out.println("새로운 checkout 날짜를 YYMMDD 형식으로 입력하세요. (메인메뉴: q) ");
+            String input = scan.nextLine().trim();
+
+
+            if ("q".equalsIgnoreCase(input)) {
+                return null;
+            }
+
+            try {
+                return LocalDate.parse(input, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("잘못된 날짜 형식입니다. 다시 입력해주세요.(YYMMDD)");
+            }
+        }
     }
     public int inputReturnToManagerMenu() {    // 관리자 메뉴로돌아가시겠습니까?1. yes2. no
         System.out.println("로그아웃 하시겠습니까?\n"
