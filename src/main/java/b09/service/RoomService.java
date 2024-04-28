@@ -66,7 +66,7 @@ public class RoomService{
         for (int floor = startFloor; floor <= endFloor; floor++) {
             for (int roomNum = 0; roomNum < hotelrooms[floor].length; roomNum++) {
                 if (hotelrooms[floor][roomNum]) {
-                    availableRooms.add((floor+2) + "0" + (roomNum+1)+"호"); // 아 근데 10호면 2010호 이렇게 되네요...
+                    availableRooms.add((floor+2) + "0" + (roomNum+1)); // 아 근데 10호면 2010호 이렇게 되네요...
                 }
             }
         }
