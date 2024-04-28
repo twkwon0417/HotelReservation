@@ -29,6 +29,11 @@ public class ReservedDate {
         validate();
     }
 
+    public ReservedDate(LocalDate startDate, LocalDate endDate) {
+        this.startDate=startDate;
+        this.endDate=endDate;
+    }
+
     private void validate() throws Exception {
         System.out.println(startDate);
         System.out.println(endDate);

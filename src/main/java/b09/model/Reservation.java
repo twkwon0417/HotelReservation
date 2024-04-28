@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 public class Reservation {
     private Long id;
-    private final Long memberId;
+    private Long memberId;
     private final RoomNumber roomNumber;
     private final ReservedDate reservedDate;
     private final NumberOfPeople numberOfPeople;
@@ -16,6 +16,16 @@ public class Reservation {
 
     public Reservation(Long memberId, RoomNumber roomNumber, ReservedDate reservedDate, NumberOfPeople numberOfPeople,
                        AdditionalProduct additionalProduct) {
+        this.memberId = memberId;
+        this.roomNumber = roomNumber;
+        this.reservedDate = reservedDate;
+        this.numberOfPeople = numberOfPeople;
+        this.additionalProduct = additionalProduct;
+    }
+    public Reservation(long id, long memberId, RoomNumber roomNumber, ReservedDate reservedDate,
+                       NumberOfPeople numberOfPeople, AdditionalProduct additionalProduct)
+    {
+        this.id = id;
         this.memberId = memberId;
         this.roomNumber = roomNumber;
         this.reservedDate = reservedDate;
@@ -50,7 +60,9 @@ public class Reservation {
     public void setId(Long id) {
         this.id = id;
     }
-
+    public void setMemberId(long memberId) {
+        this.memberId = memberId;
+    }
     public AdditionalProduct getAdditionalProduct() {
         return additionalProduct;
     }
@@ -61,6 +73,19 @@ public class Reservation {
 
     public LocalDate getCheckOutDate() {
         return reservedDate.getEndDate();
+    }
+
+    public int getBreakfast() {
+        return additionalProduct.getBreakfast();
+    }
+
+    public int getCasino() {
+        return additionalProduct.getCasino();
+    }
+
+    public int getSpa() {
+        return additionalProduct.getSpa();
+
     }
 }
 

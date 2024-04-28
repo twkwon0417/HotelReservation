@@ -1,10 +1,14 @@
 package b09.model.reservation;
 
 public class RoomNumber {
-    private final int roomNumber;
+    private int roomNumber;
 
     public RoomNumber(int roomNumber) throws Exception{
         this.roomNumber = roomNumber;
+    }
+
+    public RoomNumber(String roomNum) {
+        this.roomNumber = Integer.parseInt(roomNum);
     }
 
     private void validate() throws Exception {

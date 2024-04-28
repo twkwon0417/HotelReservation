@@ -5,12 +5,8 @@ import b09.model.reservation.AdditionalProduct;
 import b09.model.reservation.NumberOfPeople;
 import b09.model.reservation.ReservedDate;
 import b09.model.reservation.RoomNumber;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +15,6 @@ import java.util.Scanner;
 public class ReservationRepository {
     private static long sequence = 0L;
     private List<Reservation> reservations = new ArrayList<>();
-
     public Reservation getReservationById(Long id) {
         for (Reservation reservation : reservations) {
             if (reservation.getId().equals(id)) {
@@ -35,36 +30,33 @@ public class ReservationRepository {
         updateFile();
     }
 
-//    public void fileReader(String filename) {
-//        try (Scanner file = new Scanner(new File(filename))) {
-//            while (file.hasNextLine()) {
-//                String line = file.nextLine();
-//                String[] parts = line.split("\t");
-//                Reservation reservation = new Reservation();
-//                reservation.setId(Long.parseLong(parts[0]));
-//                reservation.setCustomerIndex(Long.parseLong(parts[1]));
-//                reservation.setRoomNumber(parts[2]);
-//                reservation.setCheckInDate(parts[3]);
-//                reservation.setCheckOutDate(parts[4]);
-//                reservation.setNumberOfGuests(Integer.parseInt(parts[5]));
-//                reservation.setNumberOfBreakfast(Integer.parseInt(parts[6]));
-//                reservation.setNumberOfCasino(Integer.parseInt(parts[7]));
-//                reservation.setNumberOfSpa(Integer.parseInt(parts[8]));
-//                new Reservation(Long.parseLong(parts[1]),
-//                        new RoomNumber(Integer.parseInt(parts[2])),
-//                        new ReservedDate(parts[3] + " " + parts[4], LocalDate.of(9999, 12, 31)),
-//                        new NumberOfPeople(Integer.parseInt(parts[5])),
-//                        new AdditionalProduct()
-//                );
-//
-//                reservations.add(reservation);
-//            }
-//        } catch (FileNotFoundException e) {
-//            System.out.println("파일을 찾을 수 없습니다.");
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
+    public void fileReader2(String filename) {
+
+        try (Scanner fileScanner = new Scanner(new File(filename))) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split("\t");
+
+                long id = Long.parseLong(parts[0]);
+                long memberId = Long.parseLong(parts[1]);
+                RoomNumber roomNumber = new RoomNumber(parts[2]);
+                ReservedDate reservedDate = new ReservedDate(LocalDate.parse(parts[3]), LocalDate.parse(parts[4]));
+                NumberOfPeople numberOfPeople = new NumberOfPeople(Integer.parseInt(parts[5]));
+                AdditionalProduct additionalProduct = new AdditionalProduct(Integer.parseInt(parts[6]), Integer.parseInt(parts[7]), Integer.parseInt(parts[8]));
+
+                Reservation reservation = new Reservation(id, memberId, roomNumber, reservedDate, numberOfPeople, additionalProduct);
+
+                if (!reservations.stream().anyMatch(r -> r.getId() == id)) {
+                    reservations.add(reservation);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("파일을 찾을 수 없습니다: " + filename);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     public void delete(Reservation reservation) {
         reservations.removeIf(r -> r.getId().equals(reservation.getId()));
@@ -72,25 +64,27 @@ public class ReservationRepository {
     }
 
     public List<Reservation> findAll() {
+        fileReader2("reservationInfo.txt");
         return new ArrayList<>(reservations);
     }
 
     private void updateFile() {
-//        try (BufferedWriter out = new BufferedWriter(new FileWriter("reservations.txt"))) {
-//            for (Reservation reservation : reservations) {
-//                out.write(reservation.getId() + "\t" +
-//                                reservation.getCustomerIndex() + "\t" +
-//                                reservation.getRoomNumber() + "\t" +
-//                                reservation.getCheckInDate() + "\t" +
-//                                reservation.getCheckOutDate() + "\t" +,
-//                        reservation.getNumberOfGuests() + "\t" +
-//                                reservation.getNumberOfBreakfast() + "\t" +
-//                                reservation.getNumberOfCasino() + "\t" +
-//                                reservation.getNumberOfSpa());
-//                out.newLine();
-//            }
-//        } catch (IOException e) {
-//            System.out.println("파일을 업데이트하는데 실패했습니다.");
-//        }
+        try (BufferedWriter out = new BufferedWriter(new FileWriter("reservationInfo.txt"))) {
+            for (Reservation reservation : reservations) {
+                out.write(
+                        reservation.getId() + "\t" +
+                                reservation.getMemberId() + "\t" +
+                                reservation.getRoomNumber() + "\t" +
+                                reservation.getCheckInDate() + "\t" +
+                                reservation.getCheckOutDate() + "\t" +
+                                reservation.getNumberOfPeople() + "\t" +
+                                reservation.getBreakfast() + "\t" +
+                                reservation.getCasino() + "\t" +
+                                reservation.getSpa());
+                out.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("파일을 업데이트하는데 실패했습니다.");
+        }
     }
 }

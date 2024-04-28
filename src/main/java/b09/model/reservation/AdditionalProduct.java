@@ -12,16 +12,19 @@ public class AdditionalProduct {
 
     public AdditionalProduct(ReservedDate reservedDate) {
         this.reservedDate = reservedDate;
+        this.breakfast = 0;
+        this.casino = 0;
+        this.spa = 0;
     }
     private int NumberOfPeople;     // 예약한 사람수 (eg. 최대 6명 방인데 "4"명)
     private int breakfast;
     private int casino;
     private int spa;
 
-    public AdditionalProduct() {
-        this.breakfast = 0;
-        this.casino = 0;
-        this.spa = 0;
+    public AdditionalProduct(int breakfast, int casino, int spa) {
+        this.breakfast = breakfast;
+        this.casino = casino;
+        this.spa = spa;
     }
 
     public int getBreakfast() {
@@ -45,7 +48,7 @@ public class AdditionalProduct {
         }
     }
 
-    public int getSpa() throws Exception {
+    public int getSpa(){
         return spa;
     }
 
