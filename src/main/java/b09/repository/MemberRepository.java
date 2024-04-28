@@ -51,29 +51,30 @@ public class MemberRepository {
             System.out.println("파일을 찾을 수 없습니다.");
         }
     }
-    public void editMember(Member memberToBeEdited, Member newMember) { // 디비 접근법 알아내기
+    public void editMember(Member memberToBeEdited, Member newMember) {
         // 절대 db(txt)파일 수정해
         // 1: 피 수정자 2: 이 객체의 정보로 바꿔줘
 
-        fileReader("clientInfo.txt");
+        fileReader("./clientInfo.txt");
         for (int i = 0; i < members.size();i++){
             if(members.get(i).getId() == memberToBeEdited.getId()){
                 members.get(i).setTotalMoneySpent(newMember.getTotalMoneySpent());
+                members.get(i).setReservations(newMember.getReservations());
             }
         } // 자 여기까지 함으로써 멤버 정보 수정 완료.
 
-        File file = new File("clientInfo.txt");
+        File file = new File("./clientInfo.txt");
         if (file.exists()) {
             file.delete();
         }
-        try {   // 일단 임시방편 여기서 Exception Handling 해주세여
+        try {
             file.createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("clientInfo.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("./clientInfo.txt"));
 
             // 아래는 데이터파일 형식에 맞게 멤버 정보 정리 후, 파일에 적는 부분.
             for (Member member : members) {
