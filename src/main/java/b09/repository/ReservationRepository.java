@@ -1,9 +1,17 @@
 package b09.repository;
 
 import b09.model.Reservation;
+import b09.model.reservation.AdditionalProduct;
+import b09.model.reservation.NumberOfPeople;
+import b09.model.reservation.ReservedDate;
+import b09.model.reservation.RoomNumber;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -42,10 +50,19 @@ public class ReservationRepository {
                 reservation.setNumberOfBreakfast(Integer.parseInt(parts[6]));
                 reservation.setNumberOfCasino(Integer.parseInt(parts[7]));
                 reservation.setNumberOfSpa(Integer.parseInt(parts[8]));
+                new Reservation(Long.parseLong(parts[1]),
+                        new RoomNumber(Integer.parseInt(parts[2])),
+                        new ReservedDate(parts[3] + " " + parts[4], LocalDate.of(9999, 12, 31)),
+                        new NumberOfPeople(Integer.parseInt(parts[5])),
+                        new AdditionalProduct()
+                );
+
                 reservations.add(reservation);
             }
         } catch (FileNotFoundException e) {
             System.out.println("파일을 찾을 수 없습니다.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
