@@ -73,10 +73,25 @@ public class InputView {
     }
 
     public RoomNumber inputRoomNumber() {   // q입력 받으면 null반환
-        return null;
+        System.out.println("방번호를 입력해주세요");
+        String userInput = scan.nextLine();
+        try {
+            if (Objects.equals(userInput, "q")) {
+                return null;
+            }
+            int userIntInput = Integer.parseInt(userInput);
+            return new RoomNumber(userIntInput);
+        } catch (NumberFormatException e) {
+            System.out.println("숫자를 입력 해주세요.");
+            return inputRoomNumber();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return inputRoomNumber();
+        }
     }
 
     public NumberOfPeople inputNumberOfPeople() {
+        System.out.println("인원수르 입력해주세요");
         String userInput = scan.nextLine();
         try {
             if (Objects.equals(userInput, "q")) {
@@ -119,7 +134,7 @@ public class InputView {
     public void inputSpa(AdditionalProduct additionalProduct) {    // 예 따로 반환 값은 없고 바로 setting
         System.out.println("몇명 할껀데?");
         try {
-            additionalProduct.setSpa(Integer.parseInt(scan.next()));
+            additionalProduct.setSpa(Integer.parseInt(scan.nextLine()));
         } catch (NumberFormatException e) {
             System.out.println("숫자가 아닙니다.");
             inputSpa(additionalProduct);
@@ -135,8 +150,7 @@ public class InputView {
         LocalTime localTime;
         try {
             localTime = LocalTime.of(Integer.parseInt(userInput.substring(0, 2))
-                    , Integer.parseInt(userInput.substring(2, 4))
-                    , Integer.parseInt(userInput.substring(4, 6)));
+                    , Integer.parseInt(userInput.substring(2, 4)));
         } catch (NumberFormatException e) {
             System.out.println("숫자만 입력해주세요");
             inputBreakfast(additionalProduct);
@@ -152,7 +166,7 @@ public class InputView {
     public void inputCasino(AdditionalProduct additionalProduct) {
         System.out.println("몇명 할껀데? 카지노");
         try {
-            additionalProduct.setCasino(Integer.parseInt(scan.next()));
+            additionalProduct.setCasino(Integer.parseInt(scan.nextLine()));
         } catch (NumberFormatException e) {
             System.out.println("숫자가 아닙니다.");
             inputCasino(additionalProduct);

@@ -16,4 +16,7 @@ public class RoomNumber {
         }
     }
 
+    public int ofInt() {
+        return this.roomNumber;
+    }
 }

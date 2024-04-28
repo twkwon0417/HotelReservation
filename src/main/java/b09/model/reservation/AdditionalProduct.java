@@ -39,7 +39,10 @@ public class AdditionalProduct {
     }
 
     public void setCasino(int casino) throws Exception {
-        this.casino = casino;
+        validateOverMax(casino);
+        if(doubleChecked()) {
+            this.casino = casino;
+        }
     }
 
     public int getSpa() throws Exception {
@@ -47,8 +50,10 @@ public class AdditionalProduct {
     }
 
     public void setSpa(int spa) throws Exception {
-        if (doubleChecked())
+        validateOverMax(spa);
+        if (doubleChecked()) {
             this.spa = spa;
+        }
     }
 
     private void validateOverMax(int numberOfPerson) throws Exception {
@@ -83,8 +88,8 @@ public class AdditionalProduct {
         try {
             System.out.println("예약하시겠습니까?");
             System.out.println("1.yes 2.no");
-            userInput = scan.nextInt();
-        } catch (InputMismatchException e) {
+            userInput = Integer.parseInt(scan.nextLine());
+        } catch (Exception e) {
             System.out.println("숫자를 입력해주세요.");
             return doubleChecked();
         }

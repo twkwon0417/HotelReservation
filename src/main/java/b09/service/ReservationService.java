@@ -91,12 +91,12 @@ public class ReservationService {
                         String str = reservStart.format(formatter);
                         str += " ";
                         str += todaysDate.minusDays(1).format(formatter);
-                        registerReservation(new Reservation(reservation.getMemberId(), reservation.getRoomNumber(), new ReservedDate(str), reservation.getNumberOfPeople(), reservation.getAdditionalProduct()));
+                        registerReservation(new Reservation(reservation.getMemberId(), reservation.getRoomNumber(), new ReservedDate(str, todaysDate), reservation.getNumberOfPeople(), reservation.getAdditionalProduct()));
                         str = "";
                         str += todaysDate.format(formatter);
                         str += " ";
                         str += reservEnd.format(formatter);
-                        registerReservation(new Reservation(reservation.getMemberId(), roomNumber, new ReservedDate(str), reservation.getNumberOfPeople(), reservation.getAdditionalProduct()));
+                        registerReservation(new Reservation(reservation.getMemberId(), roomNumber, new ReservedDate(str, todaysDate), reservation.getNumberOfPeople(), reservation.getAdditionalProduct()));
                         reservationRepository.delete(reservation);
                     }
                 }

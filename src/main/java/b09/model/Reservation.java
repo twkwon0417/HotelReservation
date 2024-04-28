@@ -4,6 +4,7 @@ import b09.model.reservation.AdditionalProduct;
 import b09.model.reservation.NumberOfPeople;
 import b09.model.reservation.ReservedDate;
 import b09.model.reservation.RoomNumber;
+import java.time.LocalDate;
 
 public class Reservation {
     private Long id;
@@ -52,6 +53,14 @@ public class Reservation {
 
     public AdditionalProduct getAdditionalProduct() {
         return additionalProduct;
+    }
+
+    public LocalDate getCheckInDate() {
+        return reservedDate.getStartDate();
+    }
+
+    public LocalDate getCheckOutDate() {
+        return reservedDate.getEndDate();
     }
 }
 

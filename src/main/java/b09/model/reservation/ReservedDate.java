@@ -72,5 +72,11 @@ public class ReservedDate {
         return this.startDate;
     }
 
+    public LocalDate getTodaysDate() {
+        return todaysDate;
+    }
 
+    public LocalDate getEndDate() {
+        return endDate;
+    }
 }

@@ -87,11 +87,11 @@ public class UserController {
                 System.out.println("예약이 완료 (아직 틀)");
                 break;
             } else if (selectedInt == 1) {
-                inputView.inputSpa(additionalProduct);
+                inputView.inputCasino(additionalProduct);
             } else if (selectedInt == 2) {
                 inputView.inputBreakfast(additionalProduct);
             } else if (selectedInt == 3) {
-                inputView.inputCasino(additionalProduct);
+                inputView.inputSpa(additionalProduct);
             } else if (selectedInt == -1) { // -1은 q를 의미합니다. InputVIew의 Line 41 참고
                 return null;
             } else {
