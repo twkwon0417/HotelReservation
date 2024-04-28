@@ -14,6 +14,10 @@ import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
 public class MemberRepository {
+    public MemberRepository() {
+        fileReader("./clientInfo.txt");
+    }
+
     private static long sequence = 0L; //static
     ArrayList<Member> members = new ArrayList<>();
     public Member getMemberById(Long id) {
@@ -49,7 +53,9 @@ public class MemberRepository {
                 count++;
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             System.out.println("파일을 찾을 수 없습니다.");
+            System.exit(0);
         }
     }
     public void editMember(Member memberToBeEdited, Member newMember) {
