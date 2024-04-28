@@ -4,36 +4,46 @@ import b09.model.Member;
 import b09.model.Reservation;
 import b09.model.Room;
 import b09.model.member.Rank;
+import b09.model.room.Constants;
+
 import java.util.List;
 
 public class OutputView {
-    public void printAvailableRooms(List<String> rooms) {     // 예약 가능한 방들의 리스트 줄테니까 이거 기반으로 예쁘게 출력해
-        if (rooms == null || rooms.isEmpty()) {
+    public void printAvailableRooms(List<String> rooms) {
+        if (rooms.isEmpty()) {
             System.out.println("예약 가능한 객실이 존재하지 않습니다.");
-            return;
-        }
+        } else {
+            System.out.println("-------------- 객실 목록 --------------");
+            for (int i = 0; i < rooms.size(); i++) {
+                System.out.print(rooms.get(i) + " ");
 
-        System.out.println("-------------- 객실 목록 --------------");
-        int count = 0;
-        for (String room : rooms) {
-            System.out.print(room + " ");
-            count++;
-            if (count == 10) {
-                System.out.println();       //10개 출력 후 줄바꿈
-                count = 0;
+                if ((i + 1) % 10 == 0) {
+                    System.out.println();
+                }
             }
-        }
-        if (count > 0) {
+
             System.out.println();
+            System.out.println("-------------------------------------");
         }
-        System.out.println("-------------------------------------");
     }
 
-    public void printReceipt(Reservation reservation, Rank rank, Member member) {
-        // member 파라미터로 추가함!! 확인해야 함
+    public void printReceipt(Reservation reservation, Rank rank, Member member, Integer roomType) {
+
         // 예약 내역이랑 토탈 금액 출력해 마지막 예약 완료때 띄어주는 문구 입니다. //
-        double totalAmount = member.getTotalMoneySpent();
+        double totalAmount = 0.0;
         double discountRate = 0.0; // 할인율 초기값 설정
+
+        if (roomType == 1) {
+            totalAmount += 100000; // STANDARD
+        } else if (roomType == 2) {
+            totalAmount += 150000; // PREMIER
+        } else if (roomType == 3) {
+            totalAmount += 200000; // SUITE
+        }
+
+        totalAmount += reservation.getAdditionalProduct().getBreakfast() * Constants.EXTRA_FEE;
+        totalAmount += reservation.getAdditionalProduct().getCasino() * Constants.CASINO_PRICE;
+        totalAmount += reservation.getAdditionalProduct().getSpa() * Constants.SPA_PRICE;
 
         //할인율 적용
         switch (rank) {
@@ -54,19 +64,12 @@ public class OutputView {
                 break;
         }
 
+
         double discountAmount = totalAmount * discountRate; // 할인 금액 계산
         double finalAmount = totalAmount - discountAmount; // 최종 금액 계산
 
         System.out.println("--------------- 예약 내역 ---------------");
-        System.out.println("예약자 ID: " + reservation.getMemberId());
-        System.out.println("객실 번호: " + reservation.getRoomNumber());
-        System.out.println("예약 날짜: " + reservation.getReservedDate());
-        System.out.println("인원 수: " + reservation.getNumberOfPeople());
-        System.out.println("추가 상품: " + reservation.getAdditionalProduct().toString());
-        System.out.println("총 금액: " + totalAmount + "원");
-        System.out.println("할인율: " + (int)(discountRate * 100) + "%");
-        System.out.println("할인 금액: " + discountAmount + "원");
-        System.out.println("결제 금액: " + finalAmount + "원");
+        System.out.println("전체 예약 비용은 " + finalAmount + "원 입니다.");
         System.out.println("---------------------------------------");
     }
 

@@ -36,14 +36,14 @@ public class RoomService{
         LocalDate userCheckInDate = reservedDate.getStartDate(); // 사용자가 입력한 체크인 날짜
         LocalDate userCheckOutDate = reservedDate.getEndDate(); // 사용자가 입력한 체크아웃 날짜
 
-        List<RoomNumber> reservedRoomNumbers = repository.findAllRoomNumbers();
+        List<Reservation> allReservation = repository.findAll();
 
-        for (RoomNumber reservation : reservedRoomNumbers) {
+        for (Reservation reservation : allReservation) {
             LocalDate checkInDate = reservation.getCheckInDate();
             LocalDate checkOutDate = reservation.getCheckOutDate();
 
             if (!userCheckOutDate.isBefore(checkInDate) && !userCheckInDate.isAfter(checkOutDate)) {
-                int roomNumber = reservation.getRoomNumber();
+                int roomNumber = reservation.getRoomNumber().ofInt();
                 int floor = roomNumber / 100 - 1;
                 int roomNum = roomNumber % 100 - 1;
                 hotelrooms[floor][roomNum] = false;

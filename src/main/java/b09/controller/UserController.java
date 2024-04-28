@@ -66,7 +66,7 @@ public class UserController {
                 System.out.println(member.getId());
                 Reservation reservation = new Reservation(member.getId(), roomNumber, reservedDate, numberOfPeople, additionalProduct);
                 reservationService.registerReservation(reservation);    // reservation에 memberId있어서 member 따로 안넘겨줘도 됨
-                outputView.printReceipt(reservation, member.getRank(), member);
+                outputView.printReceipt(reservation, member.getRank(), member, roomType);
                 break;
             } else if (willYouPay == 2) {
                 assembleAdditionalProduct(additionalProduct, numberOfPeople);
