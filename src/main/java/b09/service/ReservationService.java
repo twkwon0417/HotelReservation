@@ -8,6 +8,7 @@ import b09.repository.MemberRepository;
 import b09.repository.ReservationRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,9 +107,37 @@ public class ReservationService {
 
     }
 
-    public void extendCheckoutDate(Reservation reservation, LocalDate todaysDate) throws Exception {
+    public void extendCheckoutDate(Reservation reservation, LocalDate extendDate) throws Exception {
         // 의미규칙이 만족하지 않을 경우 예외를 던져야ㅑ 합니다. 에러의 예외 메세지 사용장에게 무엇떄문에 불가한지 출력이 되는데 쓰임으로 예쁘게(형식에 맞게)
         // 절대 txt 파일이 수정 되어야 합니다.
+        //과거 검사
+        LocalDate todayDate = reservation.getReservedDate().getTodaysDate();
+        if(extendDate.isBefore(todayDate)){
+            throw new Exception("잘못된 날짜 입력입니다. 다시 입력해주세요");
+        }
+
+        //호텔 이용기간이 일주일 초과
+        long days  = ChronoUnit.DAYS.between(reservation.getReservedDate().getStartDate(), extendDate);
+        if(days > 7){
+            throw new Exception("호텔 이용은 최대 일주일입니다. 다시 입력해 주세요");
+        }
+
+        //기존 체크아웃 날짜로부터 변경할 체크아웃 날짜에 예약이 있는경우
+
+        LocalDate iteratorDate = reservation.getReservedDate().getEndDate();
+        for(;iteratorDate.isBefore(extendDate) || iteratorDate.isEqual(extendDate);iteratorDate.plusDays(1)){
+            List<Reservation> reservations =  findAllReservationOfDate(iteratorDate);
+            for(Reservation reserve : reservations){
+                if(reserve.getRoomNumber().equals(reservation.getRoomNumber())){
+                    throw new Exception("해당 날짜에는 예약이 존재합니다. 다른 날짜로 입력해주세요.");
+                }
+            }
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+        String str = reservation.getReservedDate().getStartDate().format(formatter)+" "+extendDate.format(formatter);
+        registerReservation(new Reservation(reservation.getMemberId(), reservation.getRoomNumber(), new ReservedDate(str, todayDate), reservation.getNumberOfPeople(), reservation.getAdditionalProduct()));
+        reservationRepository.delete(reservation);
 
     }
 
