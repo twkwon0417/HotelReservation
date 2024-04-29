@@ -15,7 +15,7 @@ public class Main {
         while(true) {
             Member member = homeController.init();  // kill (전체 프로그램) 하는 코드는 여기 안에서 다룰고 있음
 
-            if (Objects.equals(member.getPhoneNumber().getPhoneNumber(), "MANAGER")) {
+            if (member == null) {
                 managerController.initMain();
             } else {
                 userController.initMain(member);
