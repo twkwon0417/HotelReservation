@@ -103,9 +103,6 @@ public class ReservationRepository {
                 ret.add(reservation);
             }
         }
-        if(ret.isEmpty()) {
-            return null;
-        }
         return ret;
     }
 }
