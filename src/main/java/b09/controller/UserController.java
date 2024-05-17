@@ -116,19 +116,25 @@ public class UserController {
     }
 
     private void deleteReservation(List<Reservation> reservations) {
-        System.out.print("취소할 객실 목록의 번호 입력");
-        try {
-            int idx = Integer.parseInt(scan.nextLine()) - 1;
-            Reservation reservationToBeDeleted = reservations.get(idx);
-            if(inputView.inputYesOrNo() == 2) return;
-            reservationService.deleteReservation(reservationToBeDeleted);
-        } catch (NumberFormatException e) {
-            System.out.println("숫자를 입력해주세요");
-            deleteReservation(reservations);
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("객실 목록 번호중에 입력해주세요");
-            deleteReservation(reservations);
+        System.out.println("취소할 객실의 방번호를 입력해주세요.");
+        System.out.print("> ");
+        String roomNumberInput = scan.nextLine();
+
+        Reservation reservationToBeDeleted = null;
+        for(Reservation checkroomnum : reservations) {
+            if(checkroomnum.getRoomNumber().getNumber().equals(roomNumberInput)) {
+                reservationToBeDeleted = checkroomnum;
+                break;
+            }
         }
+
+        if (reservationToBeDeleted == null) {
+            System.out.println("해당 방번호의 예약이 없습니다.");
+            return;
+        }
+
+        reservations.remove(reservationToBeDeleted);
+        reservationService.deleteReservation(reservationToBeDeleted);
         System.out.println("취소가 완료되었습니다.");
     }
 }

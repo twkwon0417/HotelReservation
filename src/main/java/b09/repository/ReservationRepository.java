@@ -36,7 +36,9 @@ public class ReservationRepository {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
                 String[] parts = line.split("\t");
-
+                if(parts[0].isEmpty()){
+                    return;
+                }
                 long id = Long.parseLong(parts[0]);
                 long memberId = Long.parseLong(parts[1]);
                 RoomNumber roomNumber = new RoomNumber(parts[2]);

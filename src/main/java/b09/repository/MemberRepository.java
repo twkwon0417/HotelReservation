@@ -40,18 +40,22 @@ public class MemberRepository {
 
     public void fileReader(String filename) {
         try (Scanner file = new Scanner(new File(filename));) {
+            members = new ArrayList<>();
             int count = 0;
             while (file.hasNextLine()) {
                 String str = file.nextLine();
                 String[] result = str.split("\t"); // 탭을 기준으로 분리
                 ArrayList<Integer> reservationList = new ArrayList<>();
-                for(int i = 3; i< result.length; i++){
-                    reservationList.add(parseInt(result[i]));
+                if(result.length >= 3){
+                    for(int i = 3; i< result.length; i++){
+                        reservationList.add(parseInt(result[i]));
+                    }
+                    members.add(new Member(new PhoneNumber(result[1]), parseInt(result[2]), reservationList));
+                    members.get(count).setId(parseLong(result[0]));
+                    count++;
                 }
-                members.add(new Member(new PhoneNumber(result[1]), parseInt(result[2]), reservationList));
-                members.get(count).setId(parseLong(result[0]));
-                count++;
             }
+            file.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("파일을 찾을 수 없습니다.");
@@ -61,12 +65,10 @@ public class MemberRepository {
     public void editMember(Member memberToBeEdited, Member newMember) {
         // 절대 db(txt)파일 수정해
         // 1: 피 수정자 2: 이 객체의 정보로 바꿔줘
-
-        fileReader("./clientInfo.txt");
         for (int i = 0; i < members.size();i++){
             if(Objects.equals(members.get(i).getId(), memberToBeEdited.getId())){
-                members.get(i).setTotalMoneySpent(newMember.getTotalMoneySpent());
-                members.get(i).setReservations(newMember.getReservations());
+                members.get(i).setTotalMoneySpent(memberToBeEdited.getTotalMoneySpent());
+                members.get(i).setReservations(memberToBeEdited.getReservations());
             }
         } // 자 여기까지 함으로써 멤버 정보 수정 완료.
 
@@ -85,10 +87,10 @@ public class MemberRepository {
 
             // 아래는 데이터파일 형식에 맞게 멤버 정보 정리 후, 파일에 적는 부분.
             for (Member member : members) {
-                String memberInfo = member.getId() + "\t" + member.getPhoneNumber() + "\t" +
+                String memberInfo = member.getId() + "\t" + member.getPhoneNumber().getPhoneNumber() + "\t" +
                         member.getTotalMoneySpent() + "\t";
                 for(int i = 0; i < member.getReservations().size(); i++){
-                    memberInfo += member.getReservations().get(i);
+                    memberInfo += member.getReservations().get(i).toString();
                     memberInfo += "\t";
                 }
                 writer.write(memberInfo + "\n");

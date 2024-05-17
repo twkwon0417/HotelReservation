@@ -185,28 +185,40 @@ public class InputView {
     }
 
     public void inputBreakfast(AdditionalProduct additionalProduct) {
-        System.out.println("현재 시간을 입력해주세요.");
-        System.out.print("> ");
-        String userInput = scan.nextLine();
-        LocalTime localTime;
-
-        try {
+        // stack overflow -> 재귀호출 (x)  반복문 (o)
+        boolean validInput = false;
+        while (!validInput) {
+            System.out.println("현재 시간을 입력해주세요 (예: 0800):");
+            System.out.print("> ");
+            String userInput = scan.nextLine();
             int hour = Integer.parseInt(userInput.substring(0, 2));
-            int minute = Integer.parseInt(userInput.substring(2, 4));
-            localTime = LocalTime.of(hour, minute);
+            int minute = Integer.parseInt(userInput.substring(2,4));
 
-            // 입력된 시간이 0시부터 18시 사이인지 검증
-            if (hour < 0 || hour > 18) {
-                throw new IllegalArgumentException("현재 조식 예약이 가능한 시간이 아닙니다. 다음에 이용해주세요.\n");
+            try {
+                // 입력된 input이 4자리가 아닌 경우
+                if (userInput.length() != 4) {
+                    throw new IllegalArgumentException("시간은 4자리로 입력해주세요 (예: 0800).\n");
+                }
+                // 입력된 hour이 0~23이 아닌 경우
+                if (hour < 0 || hour > 23) {
+                    throw new IllegalArgumentException("시간은 0부터 23까지의 숫자로 입력해주세요.\n");
+                }
+                // 입력된 minute이 00~59가 아닌 경우
+                if (minute < 0 || minute > 59) {
+                    throw new IllegalArgumentException("분은 00부터 59까지의 숫자로 입력해주세요.\n");
+                }
+                LocalTime localTime = LocalTime.of(hour, minute);
+                // 여기서 localtime 검증 한번더
+                additionalProduct.validateBreakfastTime(localTime);
+                validInput = true; // 올바른 입력이 들어왔으므로 루프 종료
+            } catch (NumberFormatException e) {
+                System.out.println("숫자만 입력해주세요.");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                return;
             }
-        } catch (NumberFormatException e) {
-            System.out.println("숫자만 입력해주세요.");
-            inputBreakfast(additionalProduct);
-            return;
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            return;
         }
+
 
         System.out.println("조식 서비스를 이용하실 인원 수를 입력해주세요.");
         System.out.print("> ");
@@ -233,7 +245,7 @@ public class InputView {
         String response = scan.nextLine();
         if ("1".equals(response)) {
             try {
-                additionalProduct.setBreakfast(numberOfPeople, localTime);
+                // additionalProduct.setBreakfast(numberOfPeople, localTime);
                 System.out.println("* 예약이 완료되었습니다. 조식 이용 가능 시간대는 7:00 ~ 11:00 입니다. *");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -287,15 +299,14 @@ public class InputView {
         System.out.print("> ");
         String userInput = scan.nextLine();
 
-        if(Objects.equals(userInput, "1")) {
+        if(userInput.equals("1")) {
             return 1;
         }
-        else if (Objects.equals(userInput, "2")){
+        else if (userInput.equals("2")){
             return 2;
         }
         else {
             System.out.println("잘못된 입력입니다.");
-            System.out.print("> ");
             return inputYesOrNo();
         }
     }

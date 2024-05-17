@@ -64,12 +64,15 @@ public class AdditionalProduct {
         }
     }
 
-    private void validateBreakfastTime(LocalTime localTime){
+    public void validateBreakfastTime(LocalTime localTime){
         LocalDate previousDate = reservedDate.getStartDate().minusDays(1); // 예약 시작 날짜의 전날
-        LocalTime limitTime = LocalTime.of(18, 0); // 오후 6시 이전까지만
-        LocalDateTime limitDateTime = LocalDateTime.of(previousDate, limitTime);
-        LocalDateTime selectedDateTime = LocalDateTime.of(reservedDate.getStartDate(), localTime);
+        LocalTime limitTime = LocalTime.of(20, 0); // 오후 8시 이전까지만
 
+        if (previousDate.equals(reservedDate.getTodaysDate())) {
+            if (localTime.isAfter(limitTime)) {
+                throw new IllegalArgumentException("오후 8시 이전까지만 예약이 가능합니다.");
+            }
+        }
     }
 
     public int getNumberOfPeople() {

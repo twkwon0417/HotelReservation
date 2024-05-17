@@ -24,16 +24,8 @@ public class RoomNumber {
         }
     }
 
-    public LocalDate getCheckInDate() {
-        return reservedDate.getStartDate();
-    }
-
-    public LocalDate getCheckOutDate() {
-        return reservedDate.getEndDate();
-    }
-
-    public int getRoomNumber() {
-        return roomNumber;
+    public String getNumber(){
+        return String.valueOf(this.roomNumber);
     }
 
     public int ofInt() {
