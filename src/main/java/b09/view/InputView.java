@@ -68,7 +68,7 @@ public class InputView {
     }
 
     public ReservedDate inputReservedDate(LocalDate todaysDate) {   // 이런 식으로 try-catch로 원하는 입력이 들어올떄까지 계속 돌릴슈 있음. 참고 하면 좋읅섯 같습니다.
-        System.out.println("체크인, 체크아웃 날짜를 입력해주세요. (메인메뉴: q)");
+        System.out.println("체크인, 체크아웃 날짜를 입력해주세요.(YYMMDD YYMMDD)(메인메뉴: q)");
         System.out.print("> ");
         String input = scan.nextLine();
         try {

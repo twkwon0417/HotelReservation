@@ -56,6 +56,7 @@ public class UserController {
         if(roomNumber == null) return;
 
         NumberOfPeople numberOfPeople = inputView.inputNumberOfPeople();
+        if(numberOfPeople == null) return;
 
         AdditionalProduct additionalProduct = assembleAdditionalProduct(new AdditionalProduct(reservedDate), numberOfPeople);
         if(additionalProduct == null) return;
