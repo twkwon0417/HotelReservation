@@ -72,7 +72,7 @@ public class UserController {
             } else if (willYouPay == 2) {
                 assembleAdditionalProduct(additionalProduct, numberOfPeople);
             } else {
-                System.out.println("유효 x input");
+                System.out.println("유효하지 않은 입력 값입니다.");
             }
         }
     }
@@ -85,7 +85,7 @@ public class UserController {
             int selectedInt = inputView.inputAdditionalProductMenu();
 
             if(selectedInt == 4) {
-                System.out.println("예약이 완료 (아직 틀)");
+                System.out.println("예약을 마무리합니다.");
                 break;
             } else if (selectedInt == 1) {
                 inputView.inputCasino(additionalProduct);
@@ -96,7 +96,7 @@ public class UserController {
             } else if (selectedInt == -1) { // -1은 q를 의미합니다. InputVIew의 Line 41 참고
                 return null;
             } else {
-                System.out.println("잘못된 입력입ㄴ디ㅏ.(아직 틀)");
+                System.out.println("잘못된 입력입니다.");
             }
         }
         return additionalProduct;

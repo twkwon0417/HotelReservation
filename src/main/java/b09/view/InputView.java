@@ -316,7 +316,7 @@ public class InputView {
         System.out.print("> ");
         String userInput = scan.nextLine();
         if(Objects.equals(userInput, "B09")){
-            throw new Exception("매니져요");
+            throw new Exception("매니저입니다.");
         }
         try {
             if(Objects.equals(userInput, "q")) {

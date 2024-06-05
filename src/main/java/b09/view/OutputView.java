@@ -5,6 +5,7 @@ import b09.model.Reservation;
 import b09.model.member.Rank;
 import b09.model.room.Constants;
 
+import java.time.temporal.Temporal;
 import java.util.List;
 
 public class OutputView {
@@ -32,6 +33,11 @@ public class OutputView {
         double totalAmount = 0;
         double discountRate = 0.0; // 할인율 초기값 설정
 
+        Temporal checkInDate = reservation.getCheckInDate();
+        Temporal checkOutDate = reservation.getCheckOutDate();
+        long numberOfNights = java.time.temporal.ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+
+
         if (roomType == 1) {
             totalAmount += 100000; // STANDARD
         } else if (roomType == 2) {
@@ -39,6 +45,8 @@ public class OutputView {
         } else if (roomType == 3) {
             totalAmount += 200000; // SUITE
         }
+
+        totalAmount*=numberOfNights;
 
         totalAmount += reservation.getAdditionalProduct().getCasino() * Constants.CASINO_PRICE;
         totalAmount += reservation.getAdditionalProduct().getSpa() * Constants.SPA_PRICE;
