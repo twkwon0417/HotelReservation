@@ -1,6 +1,7 @@
 package b09.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Coupon {
     private Long id;
@@ -58,5 +59,35 @@ public class Coupon {
 
     public void setCouponNumber(String couponNumber) {
         this.couponNumber = couponNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Coupon coupon = (Coupon) o;
+        return Objects.equals(id, coupon.id) && Objects.equals(memberId, coupon.memberId)
+                && Objects.equals(startDate, coupon.startDate) && Objects.equals(expireDate,
+                coupon.expireDate) && Objects.equals(couponNumber, coupon.couponNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, memberId, startDate, expireDate, couponNumber);
+    }
+
+    @Override
+    public String toString() {
+        return "Coupon{" +
+                "id=" + id +
+                ", memberId=" + memberId +
+                ", startDate=" + startDate +
+                ", expireDate=" + expireDate +
+                ", couponNumber='" + couponNumber + '\'' +
+                '}';
     }
 }

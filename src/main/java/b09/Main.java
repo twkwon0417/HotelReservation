@@ -4,7 +4,6 @@ import b09.controller.HomeController;
 import b09.controller.ManagerController;
 import b09.controller.UserController;
 import b09.model.Member;
-import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
