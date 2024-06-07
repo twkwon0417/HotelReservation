@@ -43,7 +43,7 @@ public class RoomService{
 
             if (!userCheckOutDate.isBefore(checkInDate) && !userCheckInDate.isAfter(checkOutDate)) {
                 int roomNumber = reservation.getRoomNumber().ofInt();
-                int floor = roomNumber / 100 - 1;
+                int floor = roomNumber / 100 - 2;
                 int roomNum = roomNumber % 100 - 1;
                 if (roomType == 1 && floor >= 0 && floor <= 4) { // standard room
                     hotelrooms[floor][roomNum] = false;
@@ -58,23 +58,23 @@ public class RoomService{
         int startFloor = 0, endFloor = 0;
         switch (roomType) {
             case 1:
-                startFloor = 1; // standard 시작 층
-                endFloor = 5; // standard 종료 층
+                startFloor = 0; // standard 시작 층
+                endFloor = 4; // standard 종료 층
                 break;
             case 2:
-                startFloor = 6; // premier 시작 층
-                endFloor = 8; // premier 종료 층
+                startFloor = 5; // premier 시작 층
+                endFloor = 7; // premier 종료 층
                 break;
             case 3:
-                startFloor = 9; // suite 시작 층
-                endFloor = 9; // suite 종료 층
+                startFloor = 8; // suite 시작 층
+                endFloor = 8; // suite 종료 층
                 break;
         }
 
         for (int floor = startFloor; floor <= endFloor; floor++) {
-            for (int roomNum = 0; roomNum < hotelrooms[floor].length; roomNum++) {
+            for (int roomNum = 0; roomNum < 10; roomNum++) {
                 if (hotelrooms[floor][roomNum]) {
-                    String roomNumber = (floor + 1) * 100 + (roomNum + 1) + "";
+                    String roomNumber = (floor + 2) * 100 + (roomNum + 1) + "";
                     availableRooms.add(roomNumber);
                 }
             }

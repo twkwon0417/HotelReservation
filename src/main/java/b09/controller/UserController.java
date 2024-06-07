@@ -47,7 +47,7 @@ public class UserController {
         ReservedDate reservedDate = inputView.inputReservedDate(todaysDate);
         if(reservedDate == null) return;
         reservedDate.setTodaysDate(todaysDate);
-        Integer roomType = inputView.inputRoomType();
+        Integer roomType = inputView.inputRoomType(reservedDate);
         if(roomType == null) return;
 
         List<String> rooms = roomService.getRoomOfCondition(reservedDate, roomType);
@@ -68,6 +68,7 @@ public class UserController {
                 Reservation reservation = new Reservation(member.getId(), roomNumber, reservedDate, numberOfPeople, additionalProduct);
                 reservationService.registerReservation(reservation);    // reservation에 memberId있어서 member 따로 안넘겨줘도 됨
                 outputView.printReceipt(reservation, member.getRank(), member, roomType);
+                //TODO 여기에 내 부분 호출 추가하기
                 break;
             } else if (willYouPay == 2) {
                 assembleAdditionalProduct(additionalProduct, numberOfPeople);

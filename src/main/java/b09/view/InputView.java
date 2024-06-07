@@ -41,13 +41,29 @@ public class InputView {
         }
     }
 
-    public Integer inputRoomType() {   // 제대로 사용자가 input주는 지 확인하고 계속 반복 돌려주게 해야도;ㄹ듯
+    public Integer inputRoomType(ReservedDate datecheck) {
 
         while (true) { // 올바른 입력을 받을 때까지 반복
-            System.out.println("객실 등급을 선택해주세요. (메인메뉴 : q)");
-            System.out.println("1. standard(100,000원)");
-            System.out.println("2. premier(150,000원)");
-            System.out.println("3. suite(200,000원)");
+            if(datecheck.checkEventDay(datecheck.getThisYear())){
+                System.out.println("이벤트 데이가 포함되어있습니다. 예약은 인상된 가격으로 진행됩니다.");
+                System.out.println("객실 등급을 선택해주세요. (메인메뉴 : q)");
+                System.out.println("1. standard(150,000원)");
+                System.out.println("2. premier(225,000원)");
+                System.out.println("3. suite(300,000원)");
+            }
+            else if(datecheck.peakSeasonCheck()){
+                System.out.println(datecheck.getThisMonth()+"월 예약은 인상된 가격으로 진행됩니다.");
+                System.out.println("객실 등급을 선택해주세요. (메인메뉴 : q)");
+                System.out.println("1. standard(130,000원)");
+                System.out.println("2. premier(195,000원)");
+                System.out.println("3. suite(260,000원)");
+            }
+            else {
+                System.out.println("객실 등급을 선택해주세요. (메인메뉴 : q)");
+                System.out.println("1. standard(100,000원)");
+                System.out.println("2. premier(150,000원)");
+                System.out.println("3. suite(200,000원)");
+            }
             System.out.print("> ");
             String input = scan.nextLine(); // 사용자 입력 받기
 

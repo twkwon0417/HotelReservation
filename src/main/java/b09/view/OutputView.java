@@ -29,6 +29,9 @@ public class OutputView {
 
     public void printReceipt(Reservation reservation, Rank rank, Member member, Integer roomType) {
 
+        double STANDARD = 100000;
+        double PREMIER = 150000;
+        double SUITE = 200000;
         // 예약 내역이랑 토탈 금액 출력해 마지막 예약 완료때 띄어주는 문구 입니다. //
         double totalAmount = 0;
         double discountRate = 0.0; // 할인율 초기값 설정
@@ -37,13 +40,23 @@ public class OutputView {
         Temporal checkOutDate = reservation.getCheckOutDate();
         long numberOfNights = java.time.temporal.ChronoUnit.DAYS.between(checkInDate, checkOutDate);
 
+        if(reservation.getReservedDate().peakSeasonCheck()){
+            STANDARD = 130000;
+            PREMIER = 195000;
+            SUITE = 260000;
+        }
+        else if(reservation.getReservedDate().checkEventDay(reservation.getReservedDate().getThisYear())){
+            STANDARD = 150000;
+            PREMIER = 225000;
+            SUITE = 300000;
+        }
 
         if (roomType == 1) {
-            totalAmount += 100000; // STANDARD
+            totalAmount += STANDARD; // STANDARD
         } else if (roomType == 2) {
-            totalAmount += 150000; // PREMIER
+            totalAmount += PREMIER; // PREMIER
         } else if (roomType == 3) {
-            totalAmount += 200000; // SUITE
+            totalAmount += SUITE; // SUITE
         }
 
         totalAmount*=numberOfNights;
