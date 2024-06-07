@@ -27,39 +27,22 @@ public class OutputView {
         }
     }
 
-    public void printReceipt(Reservation reservation, Rank rank, Member member, Integer roomType) {
-
-        double STANDARD = 100000;
-        double PREMIER = 150000;
-        double SUITE = 200000;
-        // 예약 내역이랑 토탈 금액 출력해 마지막 예약 완료때 띄어주는 문구 입니다. //
+    public double calculateTotalAmount(Reservation reservation, Integer roomType, Rank rank) {
         double totalAmount = 0;
-        double discountRate = 0.0; // 할인율 초기값 설정
 
         Temporal checkInDate = reservation.getCheckInDate();
         Temporal checkOutDate = reservation.getCheckOutDate();
         long numberOfNights = java.time.temporal.ChronoUnit.DAYS.between(checkInDate, checkOutDate);
 
-        if(reservation.getReservedDate().peakSeasonCheck()){
-            STANDARD = 130000;
-            PREMIER = 195000;
-            SUITE = 260000;
-        }
-        else if(reservation.getReservedDate().checkEventDay(reservation.getReservedDate().getThisYear())){
-            STANDARD = 150000;
-            PREMIER = 225000;
-            SUITE = 300000;
-        }
-
         if (roomType == 1) {
-            totalAmount += STANDARD; // STANDARD
+            totalAmount += 100000; // STANDARD
         } else if (roomType == 2) {
-            totalAmount += PREMIER; // PREMIER
+            totalAmount += 150000; // PREMIER
         } else if (roomType == 3) {
-            totalAmount += SUITE; // SUITE
+            totalAmount += 200000; // SUITE
         }
 
-        totalAmount*=numberOfNights;
+        totalAmount *= numberOfNights;
 
         totalAmount += reservation.getAdditionalProduct().getCasino() * Constants.CASINO_PRICE;
         totalAmount += reservation.getAdditionalProduct().getSpa() * Constants.SPA_PRICE;
@@ -70,7 +53,9 @@ public class OutputView {
             totalAmount += extraPeople * Constants.EXTRA_FEE;
         }
 
-        //할인율 적용
+        double discountRate = 0.0; // 할인율 초기값 설정
+
+        // 할인율 적용
         switch (rank) {
             case BRONZE:
                 discountRate = 0.0;
@@ -89,9 +74,15 @@ public class OutputView {
                 break;
         }
 
-
         double discountAmount = totalAmount * discountRate; // 할인 금액 계산
         double finalAmount = totalAmount - discountAmount; // 최종 금액 계산
+
+        return finalAmount;
+    }
+
+    public void printReceipt(Reservation reservation, Rank rank, Member member, Integer roomType) {
+        // 예약 내역이랑 토탈 금액 출력해 마지막 예약 완료때 띄어주는 문구 입니다. //
+        double finalAmount = calculateTotalAmount(reservation, roomType, rank);
 
         System.out.println("--------------- 예약 내역 ---------------");
         System.out.println("전체 예약 비용은 " + finalAmount + "원 입니다.");

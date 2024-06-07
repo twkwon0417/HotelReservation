@@ -8,6 +8,7 @@ import b09.model.reservation.ReservedDate;
 import b09.model.reservation.RoomNumber;
 import b09.repository.MemberRepository;
 import b09.repository.ReservationRepository;
+import b09.service.CouponService;
 import b09.service.ReservationService;
 import b09.service.RoomService;
 import b09.view.InputView;
@@ -21,6 +22,7 @@ public class UserController {
     InputView inputView = new InputView();
     OutputView outputView = new OutputView();
     RoomService roomService = new RoomService();
+    CouponService couponService = new CouponService();
     ReservationService reservationService = new ReservationService(new ReservationRepository(), new MemberRepository());
     Scanner scan = new Scanner(System.in);
 
@@ -68,7 +70,19 @@ public class UserController {
                 Reservation reservation = new Reservation(member.getId(), roomNumber, reservedDate, numberOfPeople, additionalProduct);
                 reservationService.registerReservation(reservation);    // reservation에 memberId있어서 member 따로 안넘겨줘도 됨
                 outputView.printReceipt(reservation, member.getRank(), member, roomType);
-                //TODO 여기에 내 부분 호출 추가하기
+                //TODO ---------------------- 요기 사이에 내 부분 호출
+                int checkCoupon = couponService.nthTimeCheckCoupon(reservation.getId());
+                if(checkCoupon == 30){
+                    //TODO true일 때만 쿠폰 처리
+                } else if (checkCoupon == 50) {
+                    //TODO true일 때만 쿠폰 처리
+                }
+
+                double totalMoney = outputView.calculateTotalAmount(reservation, roomType, member.getRank());
+                if(couponService.checkCoupon(totalMoney)){
+                    //TODO true일 때만 쿠폰 처리
+                }
+                //TODO ---------------------- 요기 사이에 내 부분 호출
                 break;
             } else if (willYouPay == 2) {
                 assembleAdditionalProduct(additionalProduct, numberOfPeople);
