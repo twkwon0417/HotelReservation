@@ -1,6 +1,8 @@
 package b09.service;
 
+import b09.model.Coupon;
 import b09.model.reservation.ReservedDate;
+import b09.repository.CouponRepository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,6 +13,7 @@ import java.util.List;
 public class CouponService {
 
     private ReservedDate reservedDate;
+//    private final CouponRepository couponRepository;
     public int nthTimeCheckCoupon(long reservationIndex){ // 호출 부분 작성해야 함
         // TODO 예약 index가 25,50,75일 경우에는 return 30
         //  예약 index가 1,100일 경우에는 return 50
@@ -74,4 +77,14 @@ public class CouponService {
             }
         }
     }
+
+//    public void registerCoupon(Coupon coupon) {
+//        couponRepository.registerCoupon(reservation);
+//        Member memberToBeEdited = memberRepository.getMemberById(reservation.getMemberId());
+//        memberToBeEdited.getReservations().add(Math.toIntExact(reservation.getId()));
+//        Member newMember = new Member(memberToBeEdited.getPhoneNumber(),
+//                memberToBeEdited.getTotalMoneySpent(),
+//                memberToBeEdited.getReservations());
+//        memberRepository.editMember(memberRepository.getMemberById(reservation.getMemberId()), newMember);
+//    }
 }

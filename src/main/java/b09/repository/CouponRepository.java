@@ -1,6 +1,8 @@
 package b09.repository;
 
 import b09.model.Coupon;
+import b09.model.Reservation;
+
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,6 +12,11 @@ import java.util.Scanner;
 
 public class CouponRepository {
 
+//    public void registerCoupon(Coupon coupon) {
+//        reservation.setId(++sequence);
+//        reservations.add(reservation);
+//        updateFile();
+//    }
     public List<Coupon> getCouponOfUserId(Long userId) {
         List<Coupon> allCoupons = fileReader("couponInfo.txt");     //파일 읽어옴
         List<Coupon> userCoupons = new ArrayList<>();
