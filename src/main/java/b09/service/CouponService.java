@@ -43,7 +43,6 @@ public class CouponService {
     }
 
     public List<String> deleteCouponExpired(List<String> couponList) {
-        // TODO couponList는 3.6 getCouponOfUserID에서 받아오기
         // plus3MonthsDate: 현재에서 3개월이 지난 날짜
         LocalDate plus3MonthsDate = reservedDate.getStartDate().plusMonths(3);
         List<String> validCoupons = new ArrayList<>();
@@ -69,9 +68,11 @@ public class CouponService {
     }
 
     public void printCoupon(List<String> couponList) {
+        List<String> validCoupons = deleteCouponExpired(couponList);
+
         // TODO 쿠폰 발급일, 만료일, 할인율을 print
         int index = 1;
-        for (String coupon : couponList) {
+        for (String coupon : validCoupons) {
             String[] parts = coupon.split(" ");
             if (parts.length == 5) {
                 String date = parts[2];

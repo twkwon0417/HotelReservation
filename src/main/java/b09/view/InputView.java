@@ -5,6 +5,7 @@ import b09.model.reservation.AdditionalProduct;
 import b09.model.reservation.NumberOfPeople;
 import b09.model.reservation.ReservedDate;
 import b09.model.reservation.RoomNumber;
+import b09.service.CouponService;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.Objects;
 import java.util.Scanner;
 // TODO: q를 입력 받으면 종료되는 친구들은 q를 입력 받으면 null을 반환하게 해주세요.
 public class InputView {
+    CouponService CouponService;
     Scanner scan = new Scanner(System.in);
     public LocalDate inputTodaysDate() {    // 요친구는 따로 객체를 안 만들어서 따로 입력 형식에 따른 예외처리 해줘야 합니다. 이 친구도 q들어오면 null 반환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
@@ -580,5 +582,21 @@ public class InputView {
         System.out.println("바꾸실 등급을 입력해주세요.");
         System.out.print("> ");
         return scan.nextLine();
+    }
+    public int inputUseCoupon(List<String> couponList) {
+        // 쿠폰 리스트 출력
+        CouponService.printCoupon(couponList);
+
+        System.out.println("사용할 쿠폰의 번호를 입력하세요.");
+        System.out.print("> ");
+        int couponIndex = scan.nextInt();
+
+        // 입력받은 쿠폰 번호가 유효한지 확인하고 사용할 쿠폰 인덱스 반환
+        if (couponIndex >= 1 && couponIndex <= couponList.size()) {
+            return couponIndex;
+        } else {
+            System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
+            return inputUseCoupon(couponList);
+        }
     }
 }

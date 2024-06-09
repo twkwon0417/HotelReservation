@@ -83,6 +83,12 @@ public class UserController {
                     //TODO true일 때만 쿠폰 처리
                 }
                 //TODO ---------------------- 요기 사이에 채현 부분 호출
+
+                // TODO 사용할 쿠폰 선택
+                //  couponList는 3.6 getCouponOfUserID에서 받아오기
+                // int useCoupon = inputView.inputUseCoupon(List<String> couponList);
+                // TODO 쿠폰사용 처리 함수(couponlist에서 사용쿠폰 삭제, 총 결제금액 수정 등등) 호출
+
                 break;
             } else if (willYouPay == 2) {
                 assembleAdditionalProduct(additionalProduct, numberOfPeople);
