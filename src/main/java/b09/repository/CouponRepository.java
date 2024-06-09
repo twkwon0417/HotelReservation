@@ -12,11 +12,11 @@ import java.util.Scanner;
 
 public class CouponRepository {
 
-//    public void registerCoupon(Coupon coupon) {
+    public void registerCoupon(Coupon coupon) {
 //        reservation.setId(++sequence);
 //        reservations.add(reservation);
 //        updateFile();
-//    }
+    }
     public List<Coupon> getCouponOfUserId(Long userId) {
         List<Coupon> allCoupons = fileReader("couponInfo.txt");     //파일 읽어옴
         List<Coupon> userCoupons = new ArrayList<>();
@@ -57,7 +57,7 @@ public class CouponRepository {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("쿠폰 파일관련 에러가 있습니다.");
-//            System.exit(0);
+            System.exit(0);
         }
         return coupons;
     }

@@ -6,6 +6,7 @@ import b09.model.reservation.AdditionalProduct;
 import b09.model.reservation.NumberOfPeople;
 import b09.model.reservation.ReservedDate;
 import b09.model.reservation.RoomNumber;
+import b09.repository.CouponRepository;
 import b09.repository.MemberRepository;
 import b09.repository.ReservationRepository;
 import b09.service.CouponService;
@@ -14,7 +15,6 @@ import b09.service.RoomService;
 import b09.view.InputView;
 import b09.view.OutputView;
 import java.time.LocalDate;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,7 +22,7 @@ public class UserController {
     InputView inputView = new InputView();
     OutputView outputView = new OutputView();
     RoomService roomService = new RoomService();
-    CouponService couponService = new CouponService();
+    CouponService couponService = new CouponService(new CouponRepository());
     ReservationService reservationService = new ReservationService(new ReservationRepository(), new MemberRepository());
     Scanner scan = new Scanner(System.in);
 
