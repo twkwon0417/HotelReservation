@@ -9,7 +9,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CouponRepository {
-    public CouponRepository() {
+
+    public List<Coupon> getCouponOfUserId(Long userId) {
+        List<Coupon> allCoupons = fileReader("couponInfo.txt");     //파일 읽어옴
+        List<Coupon> userCoupons = new ArrayList<>();
+        for (Coupon coupon : allCoupons) {
+            if (coupon.getMemberId().equals(userId)) {      //Id 비교
+                userCoupons.add(coupon);        //리스트 추가
+            }
+        }
+        return userCoupons;     //사용자 쿠폰 리스트 반환
     }
 
     public List<Coupon> fileReader(String filename) {

@@ -70,7 +70,7 @@ public class UserController {
                 Reservation reservation = new Reservation(member.getId(), roomNumber, reservedDate, numberOfPeople, additionalProduct);
                 reservationService.registerReservation(reservation);    // reservation에 memberId있어서 member 따로 안넘겨줘도 됨
                 outputView.printReceipt(reservation, member.getRank(), member, roomType);
-                //TODO ---------------------- 요기 사이에 내 부분 호출
+                //TODO ---------------------- 요기 사이에 채현 부분 호출
                 int checkCoupon = couponService.nthTimeCheckCoupon(reservation.getId());
                 if(checkCoupon == 30){
                     //TODO true일 때만 쿠폰 처리
@@ -82,7 +82,7 @@ public class UserController {
                 if(couponService.checkCoupon(totalMoney)){
                     //TODO true일 때만 쿠폰 처리
                 }
-                //TODO ---------------------- 요기 사이에 내 부분 호출
+                //TODO ---------------------- 요기 사이에 채현 부분 호출
                 break;
             } else if (willYouPay == 2) {
                 assembleAdditionalProduct(additionalProduct, numberOfPeople);
