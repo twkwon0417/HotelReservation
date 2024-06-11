@@ -585,9 +585,6 @@ public class InputView {
         return scan.nextLine();
     }
     public int inputUseCoupon(List<Coupon> couponList) {
-        // 쿠폰 리스트 출력
-        CouponService.printCoupon(couponList);
-
         System.out.println("사용할 쿠폰의 번호를 입력하세요.");
         System.out.print("> ");
         int couponIndex = scan.nextInt();

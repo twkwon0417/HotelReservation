@@ -23,7 +23,6 @@ public class CouponRepository {
     }
 
     public void registerCoupon(Coupon coupon) {
-        // TODO 여기요!!!!!!!!
         coupon.setId(++sequence);
         coupons.add(coupon);
         updateFile();

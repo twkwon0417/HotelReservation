@@ -74,14 +74,15 @@ public class CouponService {
         }
     }
 
-
-    public void registerCoupon(Coupon coupon) {
-//        couponRepository.registerCoupon(reservation);
-//        Member memberToBeEdited = memberRepository.getMemberById(reservation.getMemberId());
-//        memberToBeEdited.getReservations().add(Math.toIntExact(reservation.getId()));
-//        Member newMember = new Member(memberToBeEdited.getPhoneNumber(),
-//                memberToBeEdited.getTotalMoneySpent(),
-//                memberToBeEdited.getReservations());
-//        memberRepository.editMember(memberRepository.getMemberById(reservation.getMemberId()), newMember);
+    public void registerCoupon(Long memberId, LocalDate startDate, int couponNumber) {
+        // TODO 쿠폰 객체 만들어서 넣어주기
+        //  public Coupon(Long id, Long memberId, LocalDate startDate, LocalDate expireDate, String couponNumber)
+        //   id는 걍 0으로 넣기(어차피 레포에 있는 함수가 setID 다시 해줌) => ok
+        //   expireDate는 여기서 계산해서 넣기 => ok
+        //   couponNumber 스트링으로 파싱해서 넣기 => ok
+        LocalDate expireDate = startDate.plusMonths(2).minusDays(1);
+        String strCouponNumber = String.valueOf(couponNumber);
+        Coupon coupon = new Coupon(0L, memberId, startDate, expireDate, strCouponNumber);
+        couponRepository.registerCoupon(coupon);
     }
 }
