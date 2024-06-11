@@ -3,7 +3,10 @@ package b09.repository;
 import b09.model.Coupon;
 import b09.model.Reservation;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,12 +14,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CouponRepository {
+    static List<Coupon> coupons;
+    static Long sequence = 0L;
+
+    public CouponRepository() {
+        coupons = fileReader("couponInfo.txt");
+    }
 
     public void registerCoupon(Coupon coupon) {
         // TODO 여기요!!!!!!!!
-//        coupon.setId(++sequence);
-//        coupons.add(reservation);
-//        updateFile();
+        coupon.setId(++sequence);
+        coupons.add(coupon);
+        updateFile();
     }
     public List<Coupon> getCouponOfUserId(Long userId) {
         List<Coupon> allCoupons = fileReader("couponInfo.txt");     //파일 읽어옴
@@ -39,6 +48,9 @@ public class CouponRepository {
                 Coupon coupon = new Coupon();
 
                 Long couponId = Long.parseLong(result[0]);
+                if(couponId > sequence) {
+                    sequence = couponId;
+                }
                 coupon.setId(couponId);
 
                 Long memberId = Long.parseLong(result[1]);
@@ -61,5 +73,26 @@ public class CouponRepository {
             System.exit(0);
         }
         return coupons;
+    }
+
+    public void updateFile() {
+        try (BufferedWriter out = new BufferedWriter(new FileWriter("couponInfo.txt"))) {
+            for (Coupon coupon : coupons) {
+                out.write(
+                        coupon.getId() + "\t" +
+                                coupon.getMemberId() + "\t" +
+                                parseLocalDate(coupon.getStartDate()) + "\t" +
+                                parseLocalDate(coupon.getExpireDate()) + "\t" +
+                                coupon.getCouponNumber());
+                out.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("파일을 업데이트하는데 실패했습니다.");
+        }
+    }
+
+    private String parseLocalDate(LocalDate localDate) {
+        String localDateString = localDate.toString();
+        return localDateString.substring(2, 4) + localDateString.substring(5, 7) + localDateString.substring(8, 10);
     }
 }
