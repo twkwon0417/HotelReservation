@@ -13,8 +13,9 @@ import java.util.Scanner;
 public class CouponRepository {
 
     public void registerCoupon(Coupon coupon) {
-//        reservation.setId(++sequence);
-//        reservations.add(reservation);
+        // TODO 여기요!!!!!!!!
+//        coupon.setId(++sequence);
+//        coupons.add(reservation);
 //        updateFile();
     }
     public List<Coupon> getCouponOfUserId(Long userId) {

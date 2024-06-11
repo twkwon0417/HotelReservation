@@ -42,47 +42,38 @@ public class CouponService {
         return false;
     }
 
-    public List<String> deleteCouponExpired(List<String> couponList) {
-        // plus3MonthsDate: 현재에서 3개월이 지난 날짜
-        LocalDate plus3MonthsDate = reservedDate.getStartDate().plusMonths(3);
-        List<String> validCoupons = new ArrayList<>();
 
-        // yyMMdd 형식의 string을 파싱하려고 DateTimeFormatter 사용
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+    public List<Coupon> deleteCouponExpired(List<Coupon> couponList) {
+        List<Coupon> validCoupons = new ArrayList<>();
 
-        for (String coupon : couponList) {
-            String[] parts = coupon.split(" ");
-            if (parts.length == 5) { // couponList가 5개 부분으로 나누어졌는지 확인
-                try {
-                    String dateString = parts[3]; // 유효기간이 txt파일에서 4번째 부분에 위치하므로
-                    LocalDate couponDateExpired = LocalDate.parse(dateString, formatter);
-                    if (!couponDateExpired.isBefore(plus3MonthsDate)) {
-                        validCoupons.add(coupon);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        for (Coupon coupon : couponList) {
+            LocalDate couponDateExpired = coupon.getExpireDate();
+            if (!couponDateExpired.isBefore(reservedDate.getTodaysDate())) {
+                validCoupons.add(coupon);
             }
         }
         return validCoupons;
     }
 
-    public void printCoupon(List<String> couponList) {
-        List<String> validCoupons = deleteCouponExpired(couponList);
+    public void printCoupon(List<Coupon> couponList) {
+        List<Coupon> validCoupons = deleteCouponExpired(couponList);
 
-        // TODO 쿠폰 발급일, 만료일, 할인율을 print
+        // 쿠폰 발급일, 만료일, 할인율을 출력
         int index = 1;
-        for (String coupon : validCoupons) {
-            String[] parts = coupon.split(" ");
-            if (parts.length == 5) {
-                String date = parts[2];
-                String dateExpired = parts[3];
-                String discountRate = parts[4];
-                System.out.println(index + ". 발급일: " + date + ", 만료일: " + dateExpired + ", 할인율: " + discountRate + "%");
-                index++;
-            }
+        for (Coupon coupon : validCoupons) {
+            LocalDate startDate = coupon.getStartDate();
+            LocalDate expireDate = coupon.getExpireDate();
+            String couponNumber = coupon.getCouponNumber();
+
+            String formattedStartDate = startDate.format(DateTimeFormatter.ofPattern("yyMMdd"));
+            String formattedExpireDate = expireDate.format(DateTimeFormatter.ofPattern("yyMMdd"));
+
+            System.out.println(index + ". 발급일: " + formattedStartDate + ", 만료일: " + formattedExpireDate + ", 쿠폰번호: " + couponNumber);
+
+            index++;
         }
     }
+
 
     public void registerCoupon(Coupon coupon) {
 //        couponRepository.registerCoupon(reservation);

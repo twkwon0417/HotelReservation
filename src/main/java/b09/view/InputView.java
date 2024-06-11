@@ -1,5 +1,6 @@
 package b09.view;
 
+import b09.model.Coupon;
 import b09.model.member.PhoneNumber;
 import b09.model.reservation.AdditionalProduct;
 import b09.model.reservation.NumberOfPeople;
@@ -583,7 +584,7 @@ public class InputView {
         System.out.print("> ");
         return scan.nextLine();
     }
-    public int inputUseCoupon(List<String> couponList) {
+    public int inputUseCoupon(List<Coupon> couponList) {
         // 쿠폰 리스트 출력
         CouponService.printCoupon(couponList);
 
