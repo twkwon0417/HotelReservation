@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class CouponRepository {
@@ -36,6 +37,17 @@ public class CouponRepository {
             }
         }
         return userCoupons;     //사용자 쿠폰 리스트 반환
+    }
+
+    public void deleteCoupon(Long couponId) {
+        Coupon toBeDeleted = null;
+        for(Coupon coupon : coupons) {
+            if(Objects.equals(coupon.getId(), couponId)) {
+                toBeDeleted = coupon;
+            }
+        }
+        coupons.remove(toBeDeleted);
+        updateFile();
     }
 
     public List<Coupon> fileReader(String filename) {

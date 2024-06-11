@@ -13,7 +13,6 @@ public class CouponRepositoryTest {
 
         for (Coupon coupon : coupons) {
             System.out.println(coupon);
-            System.out.println(parseLocalDate(coupon.getStartDate()));
         }
     }
 
@@ -23,8 +22,8 @@ public class CouponRepositoryTest {
                 LocalDate.of(2023, 1, 1), "123"));
     }
 
-    private String parseLocalDate(LocalDate localDate) {
-        String localDateString = localDate.toString();
-        return localDateString.substring(2, 4) + localDateString.substring(5, 7) + localDateString.substring(8, 10);
+    @Test
+    void deleteTest() {
+        couponRepository.deleteCoupon(3L);
     }
 }
