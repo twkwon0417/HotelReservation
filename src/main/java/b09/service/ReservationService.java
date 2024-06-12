@@ -31,23 +31,19 @@ public class ReservationService {
         reservationRepository.registerReservation(reservation);
         Member memberToBeEdited = memberRepository.getMemberById(reservation.getMemberId());
         memberToBeEdited.getReservations().add(Math.toIntExact(reservation.getId()));
-        Member newMember = new Member(memberToBeEdited.getPhoneNumber(),
-                memberToBeEdited.getTotalMoneySpent(),
-                memberToBeEdited.getReservations());
-        memberRepository.editMember(memberRepository.getMemberById(reservation.getMemberId()), newMember);
+
+        // 변경 사항을 파일에 저장
+        memberRepository.updateFile();
     }
     //예약 삭제
     public void deleteReservation(Reservation reservation) {
-        Member member = memberRepository.getMemberById(reservation.getMemberId());  // 멤버가 가지고 있는 예약들의 리스트를 수정
+        Member member = memberRepository.getMemberById(reservation.getMemberId());
         member.getReservations().remove(Math.toIntExact(reservation.getId()));
-        memberRepository.editMember(
-                member, new Member(
-                        member.getPhoneNumber(),
-                        member.getTotalMoneySpent(), //total money를 그대로 해도 되는지?
-                        member.getReservations()  //이것도
-                )
-        );
 
+        // 변경 사항을 파일에 저장
+        memberRepository.updateFile();
+
+        // 예약을 삭제
         reservationRepository.delete(reservation);
     }
 

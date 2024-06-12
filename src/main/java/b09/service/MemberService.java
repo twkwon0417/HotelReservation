@@ -22,9 +22,9 @@ public class MemberService {
         return member;
     }
 
-    public void changeMemberRank(Member member, String input) throws Exception{ // member에 rank parameter가 없는데 그 등급이 되기 위한 최소한의 금액을 넣어주세요. 절대 txt 바뀌어야해
+    public void changeMemberRank(Member member, String input) throws Exception {
         Rank rank = commandToRank(input);
-        int minimumSpent;
+        int minimumSpent = 0;
 
         switch (rank) {
             case BRONZE:
@@ -43,12 +43,16 @@ public class MemberService {
                 minimumSpent = 1000000;
                 break;
             default:
-                break;
+                throw new IllegalArgumentException("Invalid rank: " + rank);
         }
 
-        Member newMember = new Member(member.getPhoneNumber(), rank.getMinimumSpent(), member.getReservations());
-        memberRepository.editMember(member, newMember);
+        // 회원의 최소 이용 금액 변경
+        member.setTotalMoneySpent(minimumSpent);
+
+        // 변경 사항을 파일에 저장
+        memberRepository.updateFile();
     }
+
 
     private Rank commandToRank(String input) throws Exception{ // 38개 단어들 중 하나가 아니면 Exception을 던지게 해주세요ㅕ.
         switch (input) {

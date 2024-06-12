@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Member { // 아마도 완성
     private Long id;
-    private final PhoneNumber phoneNumber;
+    private PhoneNumber phoneNumber;
     private int totalMoneySpent;
     private List<Integer> reservations;
 
@@ -16,13 +16,14 @@ public class Member { // 아마도 완성
         this.reservations = reservations;
     }
 
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setTotalMoneySpent(int totalMoneySpent){
-        this.totalMoneySpent = totalMoneySpent;
-    }
 
     public void setReservations(List<Integer> reservations){
         if(reservations.size() != 0){
@@ -33,6 +34,7 @@ public class Member { // 아마도 완성
         }
     }
 
+
     public Rank getRank() {
         return Rank.setRank(this.totalMoneySpent);
     }
@@ -41,13 +43,18 @@ public class Member { // 아마도 완성
         return id;
     }
 
-    public PhoneNumber getPhoneNumber() {
-        return phoneNumber;
+    public void setTotalMoneySpent(int totalMoneySpent) {
+        this.totalMoneySpent = totalMoneySpent;
     }
 
     public int getTotalMoneySpent() {
         return totalMoneySpent;
     }
+
+    public PhoneNumber getPhoneNumber() {
+        return phoneNumber;
+    }
+
 
     public List<Integer> getReservations() {
         return reservations;
