@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ReservationRepository {
+
+    public ReservationRepository() {
+        fileReader2("reservationInfo.txt");
+    }
+
     private static long sequence = 0L;
     private List<Reservation> reservations = new ArrayList<>();
     public Reservation getReservationById(Long id) {
