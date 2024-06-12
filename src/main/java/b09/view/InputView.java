@@ -102,7 +102,7 @@ public class InputView {
     }
 
     public RoomNumber inputRoomNumber() {   // q입력 받으면 null반환
-        System.out.println("예약할 객실의 호수를 입력해주세요. (메인메뉴 : q)");
+        System.out.println("예약한 객실의 호수를 입력해주세요. (메인메뉴 : q)");
         System.out.print("> ");
         String userInput = scan.nextLine();
         try {
