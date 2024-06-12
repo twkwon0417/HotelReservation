@@ -59,6 +59,10 @@ public class ReservedDate {
         return false;
 
     }
+
+    public void setEndDate(LocalDate date){
+        this.endDate = date;
+    }
     public boolean peakSeasonCheck(){
         this.thisMonth=startDate.getMonthValue();
         if(thisMonth==1||thisMonth==2||thisMonth==7||thisMonth==8||thisMonth==11||thisMonth==12)

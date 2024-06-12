@@ -13,11 +13,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ReservationRepository {
-
-    public ReservationRepository() {
-        fileReader2("reservationInfo.txt");
-    }
-
     private static long sequence = 0L;
     private List<Reservation> reservations = new ArrayList<>();
     public Reservation getReservationById(Long id) {
@@ -27,6 +22,10 @@ public class ReservationRepository {
             }
         }
         return null;
+    }
+
+    public ReservationRepository() {
+        fileReader2("reservationInfo.txt");
     }
 
     public void registerReservation(Reservation reservation) {
@@ -83,7 +82,7 @@ public class ReservationRepository {
         return roomNumbers;
     }
 
-    private void updateFile() {
+    public void updateFile() {  //public으로 수정해야 될듯
         try (BufferedWriter out = new BufferedWriter(new FileWriter("reservationInfo.txt"))) {
             for (Reservation reservation : reservations) {
                 out.write(

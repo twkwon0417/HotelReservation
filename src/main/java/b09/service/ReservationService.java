@@ -31,19 +31,23 @@ public class ReservationService {
         reservationRepository.registerReservation(reservation);
         Member memberToBeEdited = memberRepository.getMemberById(reservation.getMemberId());
         memberToBeEdited.getReservations().add(Math.toIntExact(reservation.getId()));
-
-        // 변경 사항을 파일에 저장
-        memberRepository.updateFile();
+        Member newMember = new Member(memberToBeEdited.getPhoneNumber(),
+                memberToBeEdited.getTotalMoneySpent(),
+                memberToBeEdited.getReservations());
+        memberRepository.editMember(memberRepository.getMemberById(reservation.getMemberId()), newMember);
     }
     //예약 삭제
     public void deleteReservation(Reservation reservation) {
-        Member member = memberRepository.getMemberById(reservation.getMemberId());
-        member.getReservations().remove(Math.toIntExact(reservation.getId()) - 1);
+        Member member = memberRepository.getMemberById(reservation.getMemberId());  // 멤버가 가지고 있는 예약들의 리스트를 수정
+        member.getReservations().remove(Math.toIntExact(reservation.getId()));
+        memberRepository.editMember(
+                member, new Member(
+                        member.getPhoneNumber(),
+                        member.getTotalMoneySpent(), //total money를 그대로 해도 되는지?
+                        member.getReservations()  //이것도
+                )
+        );
 
-        // 변경 사항을 파일에 저장
-        memberRepository.updateFile();
-
-        // 예약을 삭제
         reservationRepository.delete(reservation);
     }
 
@@ -105,9 +109,11 @@ public class ReservationService {
     public void extendCheckoutDate(Reservation reservation, LocalDate extendDate) throws Exception {
         // 의미규칙이 만족하지 않을 경우 예외를 던져야ㅑ 합니다. 에러의 예외 메세지 사용장에게 무엇떄문에 불가한지 출력이 되는데 쓰임으로 예쁘게(형식에 맞게)
         // 절대 txt 파일이 수정 되어야 합니다.
-        //과거 검사
-        LocalDate todayDate = reservation.getReservedDate().getTodaysDate();
-        if(extendDate.isBefore(todayDate)){
+        //기존의 체크 아웃 날짜보다 연장할 날짜가 더 과거인가? 검사
+
+
+        LocalDate endDate = reservation.getReservedDate().getEndDate();
+        if(extendDate.isBefore(endDate) || extendDate.isEqual(endDate)){
             throw new Exception("잘못된 날짜 입력입니다. 다시 입력해주세요");
         }
 
@@ -120,19 +126,20 @@ public class ReservationService {
         //기존 체크아웃 날짜로부터 변경할 체크아웃 날짜에 예약이 있는경우
 
         LocalDate iteratorDate = reservation.getReservedDate().getEndDate();
-        for(;iteratorDate.isBefore(extendDate) || iteratorDate.isEqual(extendDate);iteratorDate.plusDays(1)){
+        for(;iteratorDate.isBefore(extendDate) || iteratorDate.isEqual(extendDate);iteratorDate = iteratorDate.plusDays(1)){
             List<Reservation> reservations =  findAllReservationOfDate(iteratorDate);
             for(Reservation reserve : reservations){
-                if(reserve.getRoomNumber().equals(reservation.getRoomNumber())){
-                    throw new Exception("해당 날짜에는 예약이 존재합니다. 다른 날짜로 입력해주세요.");
+                if(!reserve.equals(reservation)){ //연장되는 예약 제외하고 나머지 예약 확인
+                    if(reserve.getRoomNumber().equals(reservation.getRoomNumber())){
+                        throw new Exception("해당 날짜에는 예약이 존재합니다. 다른 날짜로 입력해주세요.");
+                    }
                 }
+
             }
         }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-        String str = reservation.getReservedDate().getStartDate().format(formatter)+" "+extendDate.format(formatter);
-        registerReservation(new Reservation(reservation.getMemberId(), reservation.getRoomNumber(), new ReservedDate(str, todayDate), reservation.getNumberOfPeople(), reservation.getAdditionalProduct()));
-        reservationRepository.delete(reservation);
+        //예약 종료 날짜 수정
+        reservation.getReservedDate().setEndDate(extendDate);
+        reservationRepository.updateFile();
 
     }
 
