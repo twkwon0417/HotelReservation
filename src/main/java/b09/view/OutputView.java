@@ -1,9 +1,11 @@
 package b09.view;
 
+import b09.model.Coupon;
 import b09.model.Member;
 import b09.model.Reservation;
 import b09.model.member.Rank;
 import b09.model.room.Constants;
+import b09.repository.CouponRepository;
 
 import java.time.temporal.Temporal;
 import java.util.List;
@@ -74,16 +76,17 @@ public class OutputView {
                 break;
         }
 
+
         double discountAmount = totalAmount * discountRate; // 할인 금액 계산
         double finalAmount = totalAmount - discountAmount; // 최종 금액 계산
+
+
 
         return finalAmount;
     }
 
-    public void printReceipt(Reservation reservation, Rank rank, Member member, Integer roomType) {
+    public void printReceipt(Reservation reservation, Rank rank, Member member, Integer roomType, double finalAmount) {
         // 예약 내역이랑 토탈 금액 출력해 마지막 예약 완료때 띄어주는 문구 입니다. //
-        double finalAmount = calculateTotalAmount(reservation, roomType, rank);
-
         System.out.println("--------------- 예약 내역 ---------------");
         System.out.println("전체 예약 비용은 " + finalAmount + "원 입니다.");
         System.out.println("현장에서 결제 부탁드립니다.");

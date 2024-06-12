@@ -1,22 +1,24 @@
 package b09.controller;
 
-import b09.model.Member;
-import b09.model.Reservation;
-import b09.model.reservation.AdditionalProduct;
-import b09.model.reservation.NumberOfPeople;
-import b09.model.reservation.ReservedDate;
-import b09.model.reservation.RoomNumber;
-import b09.repository.CouponRepository;
-import b09.repository.MemberRepository;
-import b09.repository.ReservationRepository;
-import b09.service.CouponService;
-import b09.service.ReservationService;
-import b09.service.RoomService;
-import b09.view.InputView;
-import b09.view.OutputView;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Scanner;
+        import b09.model.Coupon;
+        import b09.model.Member;
+        import b09.model.Reservation;
+        import b09.model.reservation.AdditionalProduct;
+        import b09.model.reservation.NumberOfPeople;
+        import b09.model.reservation.ReservedDate;
+        import b09.model.reservation.RoomNumber;
+        import b09.repository.CouponRepository;
+        import b09.repository.MemberRepository;
+        import b09.repository.ReservationRepository;
+        import b09.service.CouponService;
+        import b09.service.ReservationService;
+        import b09.service.RoomService;
+        import b09.view.InputView;
+        import b09.view.OutputView;
+        import java.time.LocalDate;
+        import java.util.ArrayList;
+        import java.util.List;
+        import java.util.Scanner;
 
 public class UserController {
     InputView inputView = new InputView();
@@ -24,7 +26,10 @@ public class UserController {
     RoomService roomService = new RoomService();
     CouponService couponService = new CouponService(new CouponRepository());
     ReservationService reservationService = new ReservationService(new ReservationRepository(), new MemberRepository());
+    CouponRepository couponRepository = new CouponRepository();
+    List<Coupon> available = new ArrayList<>();
     Scanner scan = new Scanner(System.in);
+
 
     public void initMain(Member member) {
         int userInput = inputView.inputUserPage();
@@ -65,28 +70,51 @@ public class UserController {
 
         while(true) {
             int willYouPay = inputView.inputWillYouPay();
+
+            // 총금액을 계산한 값 (등급할인까지 적용된거임)
+            // n번째 예약인지 확인
+            // 맞으면 쿠폰 등록
+            // 50만원 넘는지 확인
+            // 맞으면 쿠폰 등록
+
+
             if(willYouPay == 1) {
                 System.out.println(member.getId());
                 Reservation reservation = new Reservation(member.getId(), roomNumber, reservedDate, numberOfPeople, additionalProduct);
                 reservationService.registerReservation(reservation);    // reservation에 memberId있어서 member 따로 안넘겨줘도 됨
-                outputView.printReceipt(reservation, member.getRank(), member, roomType);
+
                 //TODO ---------------------- 요기 사이에 채현 부분 호출
-                int checkCoupon = couponService.nthTimeCheckCoupon(reservation.getId());
-                if(checkCoupon == 30){
-                    //TODO true일 때만 쿠폰 처리
-                } else if (checkCoupon == 50) {
-                    //TODO true일 때만 쿠폰 처리
+                int checkNthTime = couponService.nthTimeCheckCoupon(reservation.getId());
+                if(checkNthTime == 30 || checkNthTime == 50){
+                    couponService.registerCoupon(member.getId(), todaysDate, checkNthTime);
                 }
 
                 double totalMoney = outputView.calculateTotalAmount(reservation, roomType, member.getRank());
                 if(couponService.checkCoupon(totalMoney)){
-                    //TODO true일 때만 쿠폰 처리
+                    couponService.registerCoupon(member.getId(), todaysDate,30);
                 }
                 //TODO ---------------------- 요기 사이에 채현 부분 호출
 
+                available = couponRepository.getCouponOfUserId(member.getId());
+                if (!available.isEmpty()) {  // 쿠폰을 갖고 있으면
+                    couponService.printCoupon(available);
+                    int couponIndex = inputView.inputUseCoupon(available);
+                    Coupon selectedCoupon = available.get(couponIndex);
+                    int couponNum = Integer.parseInt(selectedCoupon.getCouponNumber());
+                    if(couponNum == 30)
+                        totalMoney = totalMoney * 0.7;
+                    else if(couponNum == 50)
+                        totalMoney = totalMoney * 0.5;
+                    outputView.printReceipt(reservation, member.getRank(), member, roomType, totalMoney);
+                } else {
+                    outputView.printReceipt(reservation, member.getRank(), member, roomType, totalMoney);
+                }
+
+
                 // TODO 사용할 쿠폰 선택
                 //  couponList는 3.6 getCouponOfUserID에서 받아오기
-                // int useCoupon = inputView.inputUseCoupon(List<String> couponList);
+
+
                 // TODO 쿠폰사용 처리 함수(couponlist에서 사용쿠폰 삭제, 총 결제금액 수정 등등) 호출
 
                 break;
