@@ -98,7 +98,7 @@ public class UserController {
                 available = couponRepository.getCouponOfUserId(member.getId());
                 if (!available.isEmpty()) {  // 쿠폰을 갖고 있으면
                     couponService.printCoupon(available);
-                    int couponIndex = inputView.inputUseCoupon(available);
+                    int couponIndex = inputView.inputUseCoupon(available) - 1;
                     Coupon selectedCoupon = available.get(couponIndex);
                     int couponNum = Integer.parseInt(selectedCoupon.getCouponNumber());
                     if(couponNum == 30)
