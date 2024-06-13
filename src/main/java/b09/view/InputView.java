@@ -591,14 +591,16 @@ public class InputView {
     }
     public int inputUseCoupon(List<Coupon> couponList) {
         System.out.println("사용할 쿠폰의 번호를 입력하세요.");
+        System.out.println("0. 쿠폰 미사용");
         System.out.print("> ");
         int couponIndex = scan.nextInt();
         scan.nextLine();
 
         // 입력받은 쿠폰 번호가 유효한지 확인하고 사용할 쿠폰 인덱스 반환
-        if (couponIndex >= 1 && couponIndex <= couponList.size()) {
+        if (couponIndex >= 0 && couponIndex <= couponList.size()) {
             return couponIndex;
-        } else {
+        }
+        else {
             System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
             return inputUseCoupon(couponList);
         }

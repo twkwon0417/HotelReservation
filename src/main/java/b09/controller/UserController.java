@@ -86,14 +86,16 @@ public class UserController {
         if (!available.isEmpty()) {  // 쿠폰을 갖고 있으면
             couponService.printCoupon(available);
             int couponIndex = inputView.inputUseCoupon(available) - 1;
-            Coupon selectedCoupon = available.get(couponIndex);
-            int couponNum = Integer.parseInt(selectedCoupon.getCouponNumber());
-            if(couponNum == 30)
-                totalMoney = totalMoney * 0.7;
-            else if(couponNum == 50)
-                totalMoney = totalMoney * 0.5;
-            else
-                totalMoney = totalMoney * 1;
+            if (couponIndex !=0) {
+                Coupon selectedCoupon = available.get(couponIndex);
+                int couponNum = Integer.parseInt(selectedCoupon.getCouponNumber());
+                if(couponNum == 30)
+                    totalMoney = totalMoney * 0.7;
+                else if(couponNum == 50)
+                    totalMoney = totalMoney * 0.5;
+                else
+                    totalMoney = totalMoney * 1;
+            }
         }
         while(true) {
             int willYouPay = inputView.inputWillYouPay();
