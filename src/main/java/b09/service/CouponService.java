@@ -46,14 +46,17 @@ public class CouponService {
     public List<Coupon> deleteCouponExpired(List<Coupon> couponList) {
         List<Coupon> validCoupons = new ArrayList<>();
 
-        for (Coupon coupon : couponList) {
-            LocalDate couponDateExpired = coupon.getExpireDate();
-            if (!couponDateExpired.isBefore(reservedDate.getTodaysDate())) {
-                validCoupons.add(coupon);
+        if (reservedDate != null) {
+            for (Coupon coupon : couponList) {
+                LocalDate couponDateExpired = coupon.getExpireDate();
+                if (!couponDateExpired.isBefore(reservedDate.getTodaysDate())) {
+                    validCoupons.add(coupon);
+                }
             }
         }
         return validCoupons;
     }
+
 
     public void printCoupon(List<Coupon> couponList) {
         List<Coupon> validCoupons = deleteCouponExpired(couponList);

@@ -1,24 +1,24 @@
 package b09.controller;
 
-        import b09.model.Coupon;
-        import b09.model.Member;
-        import b09.model.Reservation;
-        import b09.model.reservation.AdditionalProduct;
-        import b09.model.reservation.NumberOfPeople;
-        import b09.model.reservation.ReservedDate;
-        import b09.model.reservation.RoomNumber;
-        import b09.repository.CouponRepository;
-        import b09.repository.MemberRepository;
-        import b09.repository.ReservationRepository;
-        import b09.service.CouponService;
-        import b09.service.ReservationService;
-        import b09.service.RoomService;
-        import b09.view.InputView;
-        import b09.view.OutputView;
-        import java.time.LocalDate;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.Scanner;
+import b09.model.Coupon;
+import b09.model.Member;
+import b09.model.Reservation;
+import b09.model.reservation.AdditionalProduct;
+import b09.model.reservation.NumberOfPeople;
+import b09.model.reservation.ReservedDate;
+import b09.model.reservation.RoomNumber;
+import b09.repository.CouponRepository;
+import b09.repository.MemberRepository;
+import b09.repository.ReservationRepository;
+import b09.service.CouponService;
+import b09.service.ReservationService;
+import b09.service.RoomService;
+import b09.view.InputView;
+import b09.view.OutputView;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class UserController {
     InputView inputView = new InputView();
@@ -68,60 +68,42 @@ public class UserController {
         AdditionalProduct additionalProduct = assembleAdditionalProduct(new AdditionalProduct(reservedDate), numberOfPeople);
         if(additionalProduct == null) return;
 
+        Reservation reservation = new Reservation(member.getId(), roomNumber, reservedDate, numberOfPeople, additionalProduct);
+        reservationService.registerReservation(reservation);    // reservation에 memberId있어서 member 따로 안넘겨줘도 됨
+
+        double totalMoney = outputView.calculateTotalAmount(reservation, roomType, member.getRank()); // 등급할인 까지만 적용된 총 금액
+
+        // 쿠폰 등록
+        int checkNthTime = couponService.nthTimeCheckCoupon(reservation.getId());
+        if(checkNthTime == 30 || checkNthTime == 50){
+            couponService.registerCoupon(member.getId(), todaysDate, checkNthTime);
+        }
+        if(couponService.checkCoupon(totalMoney)){
+            couponService.registerCoupon(member.getId(), todaysDate,30);
+        }
+        // 쿠폰 적용
+        available = couponRepository.getCouponOfUserId(member.getId());
+        if (!available.isEmpty()) {  // 쿠폰을 갖고 있으면
+            couponService.printCoupon(available);
+            int couponIndex = inputView.inputUseCoupon(available) - 1;
+            Coupon selectedCoupon = available.get(couponIndex);
+            int couponNum = Integer.parseInt(selectedCoupon.getCouponNumber());
+            if(couponNum == 30)
+                totalMoney = totalMoney * 0.7;
+            else if(couponNum == 50)
+                totalMoney = totalMoney * 0.5;
+            else
+                totalMoney = totalMoney * 1;
+        }
         while(true) {
             int willYouPay = inputView.inputWillYouPay();
-
-            // 총금액을 계산한 값 (등급할인까지 적용된거임)
-            // n번째 예약인지 확인
-            // 맞으면 쿠폰 등록
-            // 50만원 넘는지 확인
-            // 맞으면 쿠폰 등록
-
-
             if(willYouPay == 1) {
-                System.out.println(member.getId());
-                Reservation reservation = new Reservation(member.getId(), roomNumber, reservedDate, numberOfPeople, additionalProduct);
-                reservationService.registerReservation(reservation);    // reservation에 memberId있어서 member 따로 안넘겨줘도 됨
-
-                //TODO ---------------------- 요기 사이에 채현 부분 호출
-                int checkNthTime = couponService.nthTimeCheckCoupon(reservation.getId());
-                if(checkNthTime == 30 || checkNthTime == 50){
-                    couponService.registerCoupon(member.getId(), todaysDate, checkNthTime);
-                }
-
-                double totalMoney = outputView.calculateTotalAmount(reservation, roomType, member.getRank());
-                if(couponService.checkCoupon(totalMoney)){
-                    couponService.registerCoupon(member.getId(), todaysDate,30);
-                }
-                //TODO ---------------------- 요기 사이에 채현 부분 호출
-
-                available = couponRepository.getCouponOfUserId(member.getId());
-                if (!available.isEmpty()) {  // 쿠폰을 갖고 있으면
-                    couponService.printCoupon(available);
-                    int couponIndex = inputView.inputUseCoupon(available) - 1;
-                    Coupon selectedCoupon = available.get(couponIndex);
-                    int couponNum = Integer.parseInt(selectedCoupon.getCouponNumber());
-                    if(couponNum == 30)
-                        totalMoney = totalMoney * 0.7;
-                    else if(couponNum == 50)
-                        totalMoney = totalMoney * 0.5;
-                    outputView.printReceipt(reservation, member.getRank(), member, roomType, totalMoney);
-                } else {
-                    outputView.printReceipt(reservation, member.getRank(), member, roomType, totalMoney);
-                }
-
-
-                // TODO 사용할 쿠폰 선택
-                //  couponList는 3.6 getCouponOfUserID에서 받아오기
-
-
-                // TODO 쿠폰사용 처리 함수(couponlist에서 사용쿠폰 삭제, 총 결제금액 수정 등등) 호출
-
+                outputView.printReceipt(reservation, member.getRank(), member, roomType, totalMoney);
                 break;
             } else if (willYouPay == 2) {
                 assembleAdditionalProduct(additionalProduct, numberOfPeople);
             } else {
-                System.out.println("유효하지 않은 입력 값입니다.");
+                inputView.inputWillYouPay();
             }
         }
     }
