@@ -295,22 +295,27 @@ public class InputView {
         }
     }
 
-    public int inputWillYouPay() {  // 이상한 친구들 들어오면 예외 처리 해줘잉 반복 필요 x
+    public int inputWillYouPay() {
         System.out.println("결제하시겠습니까? \n" +
                 "1. yes 2.no");
         System.out.print("> ");
-        String userInput = scan.nextLine();
 
-        if(Objects.equals(userInput, "1")) {
-            return 1;
-        }
-        else if (Objects.equals(userInput, "2")){
-            return 2;
-        }
-        else {
+        try {
+            int userInput = Integer.parseInt(scan.nextLine());
+            if (userInput == 1) {
+                return 1;
+            } else if (userInput == 2) {
+                return 2;
+            } else {
+                System.out.println("잘못된 입력입니다.");
+                return -1;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("잘못된 입력입니다.");
             return -1;
         }
     }
+
 
     public int inputYesOrNo() { // 고객모드 예약 취소할때 확인 메시지 부분입니다. 요친구 재귀로 올바른 값 들어올떄까지 반복
         System.out.println("예약을 취소하시겠습니까? \n" +
@@ -588,6 +593,7 @@ public class InputView {
         System.out.println("사용할 쿠폰의 번호를 입력하세요.");
         System.out.print("> ");
         int couponIndex = scan.nextInt();
+        scan.nextLine();
 
         // 입력받은 쿠폰 번호가 유효한지 확인하고 사용할 쿠폰 인덱스 반환
         if (couponIndex >= 1 && couponIndex <= couponList.size()) {
