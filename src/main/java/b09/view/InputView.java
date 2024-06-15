@@ -102,7 +102,7 @@ public class InputView {
     }
 
     public RoomNumber inputRoomNumber() {   // q입력 받으면 null반환
-        System.out.println("예약한 객실의 호수를 입력해주세요. (메인메뉴 : q)");
+        System.out.println("객실의 호수를 입력해주세요. (메인메뉴 : q)");
         System.out.print("> ");
         String userInput = scan.nextLine();
         try {
@@ -112,7 +112,7 @@ public class InputView {
             int userIntInput = Integer.parseInt(userInput);
             return new RoomNumber(userIntInput);
         } catch (NumberFormatException e) {
-            System.out.println("숫자를 입력 해주세요.");
+            System.out.println("숫자를 입력 해주세요0.");
             System.out.print("> ");
             return inputRoomNumber();
         } catch (Exception e) {
@@ -122,7 +122,7 @@ public class InputView {
     }
 
     public RoomNumber inputSpecificRoomNumber(List<String> availableRooms) {
-        System.out.println("예약할 객실의 호수를 입력해주세요. (메인메뉴 : q)");
+        System.out.println("객실의 호수를 입력해주세요. (메인메뉴 : q)");
         System.out.print("> ");
         String userInput = scan.nextLine();
         if (Objects.equals(userInput, "q")) {
@@ -195,7 +195,7 @@ public class InputView {
         try {
             additionalProduct.setSpa(Integer.parseInt(scan.nextLine()));
         } catch (NumberFormatException e) {
-            System.out.println("숫자가 아닙니다.");
+            System.out.println("형식에 맞지 않은 입력입니다.");
             inputSpa(additionalProduct);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -249,7 +249,7 @@ public class InputView {
                 throw new IllegalArgumentException("예약 인원 수를 초과하였습니다. 다시 입력해주세요.\n");
             }
         } catch (NumberFormatException e) {
-            System.out.println("숫자만 입력해주세요.");
+            System.out.println("형식에 맞지 않은 입력입니다.");
             inputBreakfast(additionalProduct);
             return;
         } catch (IllegalArgumentException e) {
@@ -286,7 +286,7 @@ public class InputView {
         try {
             additionalProduct.setCasino(Integer.parseInt(scan.nextLine()));
         } catch (NumberFormatException e) {
-            System.out.println("숫자가 아닙니다.");
+            System.out.println("형식에 맞지 않은 입력입니다.");
             System.out.print("> ");
             inputCasino(additionalProduct);
         } catch (Exception e) {
@@ -533,14 +533,10 @@ public class InputView {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
 
         while (true) {
-            System.out.println("새로운 checkout 날짜를 YYMMDD 형식으로 입력하세요. (메인메뉴: q) ");
+            System.out.println("새로운 checkout 날짜를 YYMMDD 형식으로 입력하세요.");
             System.out.print("> ");
             String input = scan.nextLine().trim();
 
-
-            if ("q".equalsIgnoreCase(input)) {
-                return null;
-            }
 
             try {
                 return LocalDate.parse(input, formatter);
@@ -593,8 +589,14 @@ public class InputView {
         System.out.println("사용할 쿠폰의 번호를 입력하세요.");
         System.out.println("0. 쿠폰 미사용");
         System.out.print("> ");
-        int couponIndex = scan.nextInt();
-        scan.nextLine();
+        int couponIndex = 0;
+        try {
+            couponIndex = scan.nextInt();
+        } catch (Exception e) {
+            System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
+            scan.nextLine();
+            return inputUseCoupon(couponList);
+        }
 
         // 입력받은 쿠폰 번호가 유효한지 확인하고 사용할 쿠폰 인덱스 반환
         if (couponIndex >= 0 && couponIndex <= couponList.size()) {

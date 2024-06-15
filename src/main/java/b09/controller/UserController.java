@@ -21,11 +21,21 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserController {
-    InputView inputView = new InputView();
-    OutputView outputView = new OutputView();
-    RoomService roomService = new RoomService();
-    CouponService couponService = new CouponService(new CouponRepository());
+
+    private InputView inputView;
+    private OutputView outputView;
+    private RoomService roomService;
+    private CouponService couponService;
+
+
+    public UserController() {
+        this.inputView = new InputView();
+        this.outputView = new OutputView();
+        this.roomService = new RoomService();
+        this.couponService = new CouponService(new CouponRepository()); // CouponService 초기화
+    }
     ReservationService reservationService = new ReservationService(new ReservationRepository(), new MemberRepository());
+
     CouponRepository couponRepository = new CouponRepository();
     List<Coupon> available = new ArrayList<>();
     Scanner scan = new Scanner(System.in);
@@ -54,6 +64,10 @@ public class UserController {
         ReservedDate reservedDate = inputView.inputReservedDate(todaysDate);
         if(reservedDate == null) return;
         reservedDate.setTodaysDate(todaysDate);
+
+        // CouponService에 ReservedDate 설정
+        couponService.setReservedDate(reservedDate);
+
         Integer roomType = inputView.inputRoomType(reservedDate);
         if(roomType == null) return;
 
@@ -73,20 +87,25 @@ public class UserController {
 
         double totalMoney = outputView.calculateTotalAmount(reservation, roomType, member.getRank()); // 등급할인 까지만 적용된 총 금액
 
-        // 쿠폰 등록
-        int checkNthTime = couponService.nthTimeCheckCoupon(reservation.getId());
-        if(checkNthTime == 30 || checkNthTime == 50){
-            couponService.registerCoupon(member.getId(), todaysDate, checkNthTime);
-        }
-        if(couponService.checkCoupon(totalMoney)){
-            couponService.registerCoupon(member.getId(), todaysDate,30);
-        }
+
         // 쿠폰 적용
         available = couponRepository.getCouponOfUserId(member.getId());
         if (!available.isEmpty()) {  // 쿠폰을 갖고 있으면
+            // 유효기간 거르는 함수
+            available = couponService.deleteCouponExpired(available);
             couponService.printCoupon(available);
             int couponIndex = inputView.inputUseCoupon(available) - 1;
-            if (couponIndex !=0) {
+
+            // 쿠폰 등록
+            int checkNthTime = couponService.nthTimeCheckCoupon(reservation.getId());
+            if(checkNthTime == 30 || checkNthTime == 50){
+                couponService.registerCoupon(member.getId(), todaysDate, checkNthTime);
+            }
+            if(couponService.checkCoupon(totalMoney)){
+                couponService.registerCoupon(member.getId(), todaysDate,30);
+            }
+
+            if (couponIndex != -1) {
                 Coupon selectedCoupon = available.get(couponIndex);
                 int couponNum = Integer.parseInt(selectedCoupon.getCouponNumber());
                 if(couponNum == 30)

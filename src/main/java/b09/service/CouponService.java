@@ -13,7 +13,14 @@ import java.util.List;
 public class CouponService {
 
     private ReservedDate reservedDate;
-    private final CouponRepository couponRepository;
+    private CouponRepository couponRepository;
+
+    public CouponService(ReservedDate reservedDate) {
+        this.reservedDate = reservedDate;
+    }
+    public void setReservedDate(ReservedDate reservedDate) {
+        this.reservedDate = reservedDate;
+    }
 
     public CouponService(CouponRepository couponRepository) {
         this.couponRepository = couponRepository;
@@ -46,24 +53,21 @@ public class CouponService {
     public List<Coupon> deleteCouponExpired(List<Coupon> couponList) {
         List<Coupon> validCoupons = new ArrayList<>();
 
-        if (reservedDate != null) {
-            for (Coupon coupon : couponList) {
-                LocalDate couponDateExpired = coupon.getExpireDate();
-                if (!couponDateExpired.isBefore(reservedDate.getTodaysDate())) {
-                    validCoupons.add(coupon);
-                }
+        for (Coupon coupon : couponList) {
+            LocalDate couponDateExpired = coupon.getExpireDate();
+            if (!couponDateExpired.isBefore(reservedDate.getTodaysDate())) {
+                validCoupons.add(coupon);
             }
         }
+
         return validCoupons;
     }
 
 
     public void printCoupon(List<Coupon> couponList) {
-        List<Coupon> validCoupons = deleteCouponExpired(couponList);
-
         // 쿠폰 발급일, 만료일, 할인율을 출력
         int index = 1;
-        for (Coupon coupon : validCoupons) {
+        for (Coupon coupon : couponList) {
             LocalDate startDate = coupon.getStartDate();
             LocalDate expireDate = coupon.getExpireDate();
             String couponNumber = coupon.getCouponNumber();

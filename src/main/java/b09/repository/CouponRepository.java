@@ -87,6 +87,8 @@ public class CouponRepository {
     }
 
     public void updateFile() {
+        File file = new File("couponInfo.txt");
+        file.delete();
         try (BufferedWriter out = new BufferedWriter(new FileWriter("couponInfo.txt"))) {
             for (Coupon coupon : coupons) {
                 out.write(
