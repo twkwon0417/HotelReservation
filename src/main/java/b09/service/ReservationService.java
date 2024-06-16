@@ -40,7 +40,8 @@ public class ReservationService {
     //예약 삭제
     public void deleteReservation(Reservation reservation) {
         Member member = memberRepository.getMemberById(reservation.getMemberId());
-        member.getReservations().remove(Math.toIntExact(reservation.getId()));
+
+        member.getReservations().remove(Math.toIntExact(reservation.getId())-1);
 
         // 변경 사항을 파일에 저장
         memberRepository.updateFile();
