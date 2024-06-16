@@ -26,7 +26,7 @@ public class InputView {
         while (true) {
             System.out.println("날짜를 YYMMDD 형식으로 입력하세요. (메인메뉴: q)");
             System.out.print("> ");
-            String input = scan.nextLine();
+            String input = scan.nextLine().trim();
 
 
             if ("q".equalsIgnoreCase(input)) {
@@ -210,10 +210,12 @@ public class InputView {
             System.out.println("현재 시간을 입력해주세요 (예: 0800):");
             System.out.print("> ");
             String userInput = scan.nextLine();
-            int hour = Integer.parseInt(userInput.substring(0, 2));
-            int minute = Integer.parseInt(userInput.substring(2,4));
+
 
             try {
+                //문자열 숫자 변환
+                int hour = Integer.parseInt(userInput.substring(0, 2));
+                int minute = Integer.parseInt(userInput.substring(2,4));
                 // 입력된 input이 4자리가 아닌 경우
                 if (userInput.length() != 4) {
                     throw new IllegalArgumentException("시간은 4자리로 입력해주세요 (예: 0800).\n");
@@ -247,6 +249,11 @@ public class InputView {
             // 예약 인원 수를 초과하는지 검증
             if (numberOfPeople > additionalProduct.getNumberOfPeople()) {
                 throw new IllegalArgumentException("예약 인원 수를 초과하였습니다. 다시 입력해주세요.\n");
+            }
+
+            //최소 예약 인원 수 체크
+            if(numberOfPeople < 1){
+                throw new IllegalArgumentException("최소 조식 예약 인원수는 1명 이상입니다.\n");
             }
         } catch (NumberFormatException e) {
             System.out.println("형식에 맞지 않은 입력입니다.");
@@ -592,7 +599,6 @@ public class InputView {
         int couponIndex = 0;
         try {
             couponIndex = scan.nextInt();
-            scan.nextLine();
         } catch (Exception e) {
             System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
             scan.nextLine();
@@ -605,7 +611,6 @@ public class InputView {
         }
         else {
             System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
-            scan.nextLine();
             return inputUseCoupon(couponList);
         }
     }
