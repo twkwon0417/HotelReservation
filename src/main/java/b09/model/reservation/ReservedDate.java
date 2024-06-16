@@ -99,11 +99,26 @@ public class ReservedDate {
     }
 
     private void validateStayMoreThanWeek() throws Exception {
-        int daysBetween = (endDate.getDayOfMonth() - startDate.getDayOfMonth()) + 1;
-        if (daysBetween < 1 || daysBetween > 7) {
-            throw new Exception("최소 1일에서 최대 7일까지의 숙박만 가능합니다.");
+        int startDay = startDate.getDayOfMonth();
+        int endDay = endDate.getDayOfMonth();
+        int startMonth = startDate.getMonthValue();
+        int endMonth = endDate.getMonthValue();
+
+        if (startMonth == endMonth) {
+            int daysBetween = endDay - startDay + 1;
+            if (daysBetween < 1 || daysBetween > 7) {
+                throw new Exception("최소 1일에서 최대 7일까지의 숙박만 가능합니다.");
+            }
+        } else {
+            int daysInStartMonth = startDate.lengthOfMonth() - startDay + 1;
+            int daysInEndMonth = endDay;
+            int totalDays = daysInStartMonth + daysInEndMonth;
+            if (totalDays < 1 || totalDays > 7) {
+                throw new Exception("최소 1일에서 최대 7일까지의 숙박만 가능합니다.");
+            }
         }
     }
+
 
     private void validateCheckinAfterMonth() throws Exception {
         LocalDate oneMonthAfter = todaysDate.plusMonths(1).minusDays(1); // 지금 월에서 다음 달로 이동
