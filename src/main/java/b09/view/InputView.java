@@ -26,7 +26,7 @@ public class InputView {
         while (true) {
             System.out.println("날짜를 YYMMDD 형식으로 입력하세요. (메인메뉴: q)");
             System.out.print("> ");
-            String input = scan.nextLine().trim();
+            String input = scan.nextLine();
 
 
             if ("q".equalsIgnoreCase(input)) {
