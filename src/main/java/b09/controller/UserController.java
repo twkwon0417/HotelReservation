@@ -112,6 +112,7 @@ public class UserController {
                 if (couponIndex != -1) {
                     Coupon selectedCoupon = available.get(couponIndex);
                     int couponNum = Integer.parseInt(selectedCoupon.getCouponNumber());
+                    couponRepository.deleteCoupon(selectedCoupon.getId());
                     if(couponNum == 30)
                         totalMoney = totalMoney * 0.7;
                     else if(couponNum == 50)
