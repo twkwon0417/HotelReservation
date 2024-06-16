@@ -141,9 +141,18 @@ public class ManagerController {
     }
 
     private void restrictRoom(Reservation reservation, LocalDate todaysDate) {  // TODO:roomManagement의 3번 보류
+        int roomNumber = reservation.getRoomNumber().ofInt();
+        int floor = (roomNumber / 100) - 2;
+        int roomNum = roomNumber % 100 - 1;
+
+        // 이미 해당 객실이 제한되어 있는지 확인
+        if (!roomService.hotelrooms[floor][roomNum]) {
+            outputView.printAlreadyRestrictedRoom();
+            return;
+        }
+
         int userInput = inputView.inputRoomRestricted();
-        if(userInput == 1) {
-//            reservationService.       // 일단 보류
+        if (userInput == 1) {
             roomService.restrictRoom(reservation);
             outputView.printRoomRestricted();
         }

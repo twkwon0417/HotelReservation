@@ -136,4 +136,8 @@ public class OutputView {
     public void printRoomDateExtended() {
         System.out.println("투숙 기간이 연장되었습니다.");
     }
+
+    public void printAlreadyRestrictedRoom() {
+        System.out.println("이미 제한된 객실입니다.");
+    }
 }
