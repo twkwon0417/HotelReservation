@@ -84,5 +84,6 @@ public class RoomService{
     }
     public void restrictRoom(Reservation reservation) {
         hotelrooms[(reservation.getRoomNumber().ofInt() / 100)-2][reservation.getRoomNumber().ofInt() % 11] = false;
+
     }
 }

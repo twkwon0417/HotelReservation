@@ -159,16 +159,22 @@ public class ManagerController {
     }
 
     private void extendStayingDate(Reservation reservation, LocalDate todaysDate) {  // roomManagement의 4번- Exception  2와 같이
-        int userInput = inputView.inputRoomDateExtended();
-        if(userInput == 1) {
-            LocalDate newCheckoutDate = inputView.inputNewCheckoutDate();
-            try {
-                reservationService.extendCheckoutDate(reservation, newCheckoutDate);     // 요 친구 error메세지!!!! 각 validation마다(한달 넘어, 날짜가 원래 체크아웃보다 작아 등등)
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                extendStayingDate(reservation, todaysDate);
+        while (true){
+            int userInput = inputView.inputRoomDateExtended();
+            if(userInput == 1) {
+                LocalDate newCheckoutDate = inputView.inputNewCheckoutDate();
+                try {
+                    reservationService.extendCheckoutDate(reservation, newCheckoutDate);
+                    outputView.printRoomDateExtended();
+                    return;// 요 친구 error메세지!!!! 각 validation마다(한달 넘어, 날짜가 원래 체크아웃보다 작아 등등)
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            } else if (userInput == 2) {
+                return;
+
             }
-            outputView.printRoomDateExtended();
         }
+
     }
 }

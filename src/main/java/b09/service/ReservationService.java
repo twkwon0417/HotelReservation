@@ -40,7 +40,6 @@ public class ReservationService {
     //예약 삭제
     public void deleteReservation(Reservation reservation) {
         Member member = memberRepository.getMemberById(reservation.getMemberId());
-
         member.getReservations().remove(Math.toIntExact(reservation.getId())-1);
 
         // 변경 사항을 파일에 저장
@@ -64,6 +63,14 @@ public class ReservationService {
     }
 
     public void exchangeRoom(Reservation reservation, RoomNumber roomNumber, LocalDate todaysDate) throws Exception{
+        // roomnumber가 reservation에서 새로 바꿀 방의 번호입니다. todaysdate에 roomNumber의 방이 사용가능 한지 확인하고, reservation을 수정 해주세요. 사용 가능하지 않다면 꼭 예외 던져주세여
+        // 아마 reservation이 쪼개 지는 식으로 구현 될거 같은데, 주석 남겨 주세요ㅕ.
+        // MemberRepository, Reservation Repository에 새로운 메서들을 추가하셔야 할껍니당.
+        // ReservedDate에 public method로 LocalDate를 입력 받으면 LocalDate가 ReservedDate사이인지 알려주는 메서드 만들어서 활용하면 더 깔끔해질거 같은데, 편하신데로 하세욤
+        // 절대 txt 파일이 수정 되어야 합니다.
+        // 얘가 가장 복잡해 보이네요 화이팅~
+        //의미 규칙 : 이미 해당날짜의 호수에 예약이 있는 경우
+        //문법 규칙 : 객실 목록에 없는 문자열 입력, 해당 날짜의 호수에 예약이 있는 경우
         for(Reservation findReserve : reservationRepository.findAll()){
             if (findReserve.getRoomNumber().equals(roomNumber)){
                 LocalDate startDate = reservation.getReservedDate().getStartDate();
@@ -121,7 +128,7 @@ public class ReservationService {
             List<Reservation> reservations =  findAllReservationOfDate(iteratorDate);
             for(Reservation reserve : reservations){
                 if(!reserve.equals(reservation)){ //연장되는 예약 제외하고 나머지 예약 확인
-                    if(reserve.getRoomNumber().equals(reservation.getRoomNumber())){
+                    if(reserve.getRoomNumber().getNumber().equals(reservation.getRoomNumber().getNumber())){
                         throw new Exception("해당 날짜에는 예약이 존재합니다. 다른 날짜로 입력해주세요.");
                     }
                 }
@@ -131,7 +138,7 @@ public class ReservationService {
         //예약 종료 날짜 수정
         reservation.getReservedDate().setEndDate(extendDate);
         reservationRepository.updateFile();
-        // reservationRepository.fileReader2("reservationInfo.txt");
+
     }
 
 

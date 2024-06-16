@@ -30,13 +30,11 @@ public class CouponService {
         // TODO 예약 index가 25,50,75일 경우에는 return 30
         //  예약 index가 1,100일 경우에는 return 50
         //  else return 0
-
         if(reservationIndex == 25 || reservationIndex == 50 || reservationIndex == 75) {
             return 30;
         } else if (reservationIndex == 1 || reservationIndex == 100) {
             return 50;
         }
-
         return 0;
     }
 
