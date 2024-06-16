@@ -1,6 +1,7 @@
 package b09.model.reservation;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class RoomNumber {
     private int roomNumber;
@@ -35,5 +36,22 @@ public class RoomNumber {
     @Override
     public String toString() {
         return String.format("%d", roomNumber); // 객실 번호를 문자열로 반환
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        RoomNumber that = (RoomNumber) o;
+        return roomNumber == that.roomNumber && Objects.equals(reservedDate, that.reservedDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(roomNumber, reservedDate);
     }
 }
