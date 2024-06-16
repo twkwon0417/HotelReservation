@@ -21,7 +21,9 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
         this.memberRepository = memberRepository;
     }
-
+    public MemberRepository getMemberRepository(){
+        return this.memberRepository;
+    }
     //한 멤버가 갖고 있는 예약 리스트 반환
     public List<Reservation> getMembersReservation(Member member) {
         return reservationRepository.getReservationByMemberId(member.getId());
