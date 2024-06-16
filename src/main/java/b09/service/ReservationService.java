@@ -138,7 +138,7 @@ public class ReservationService {
         //예약 종료 날짜 수정
         reservation.getReservedDate().setEndDate(extendDate);
         reservationRepository.updateFile();
-
+        reservationRepository.fileReader2("reservationInfo.txt");
     }
 
 
