@@ -79,53 +79,58 @@ public class UserController {
         NumberOfPeople numberOfPeople = inputView.inputNumberOfPeople();
         if(numberOfPeople == null) return;
 
-        AdditionalProduct additionalProduct = assembleAdditionalProduct(new AdditionalProduct(reservedDate), numberOfPeople);
-        if(additionalProduct == null) return;
 
-        Reservation reservation = new Reservation(member.getId(), roomNumber, reservedDate, numberOfPeople, additionalProduct);
-        reservationService.registerReservation(reservation);    // reservation에 memberId있어서 member 따로 안넘겨줘도 됨
-
-        double totalMoney = outputView.calculateTotalAmount(reservation, roomType, member.getRank()); // 등급할인 까지만 적용된 총 금액
-
-
-        // 쿠폰 적용
-        available = couponRepository.getCouponOfUserId(member.getId());
-        if (!available.isEmpty()) {  // 쿠폰을 갖고 있으면
-            // 유효기간 거르는 함수
-            available = couponService.deleteCouponExpired(available);
-            couponService.printCoupon(available);
-            int couponIndex = inputView.inputUseCoupon(available) - 1;
-
-            // 쿠폰 등록
-            int checkNthTime = couponService.nthTimeCheckCoupon(reservation.getId());
-            if(checkNthTime == 30 || checkNthTime == 50){
-                couponService.registerCoupon(member.getId(), todaysDate, checkNthTime);
-            }
-            if(couponService.checkCoupon(totalMoney)){
-                couponService.registerCoupon(member.getId(), todaysDate,30);
-            }
-
-            if (couponIndex != -1) {
-                Coupon selectedCoupon = available.get(couponIndex);
-                int couponNum = Integer.parseInt(selectedCoupon.getCouponNumber());
-                if(couponNum == 30)
-                    totalMoney = totalMoney * 0.7;
-                else if(couponNum == 50)
-                    totalMoney = totalMoney * 0.5;
-                else
-                    totalMoney = totalMoney * 1;
-            }
-        }
         while(true) {
-            int willYouPay = inputView.inputWillYouPay();
-            if(willYouPay == 1) {
-                outputView.printReceipt(reservation, member.getRank(), member, roomType, totalMoney);
-                break;
-            } else if (willYouPay == 2) {
-                assembleAdditionalProduct(additionalProduct, numberOfPeople);
-            } else {
-                inputView.inputWillYouPay();
+            AdditionalProduct additionalProduct = assembleAdditionalProduct(new AdditionalProduct(reservedDate), numberOfPeople);
+            if(additionalProduct == null) {
+                return;
             }
+
+            Reservation reservation = new Reservation(member.getId(), roomNumber, reservedDate, numberOfPeople, additionalProduct);
+            reservationService.registerReservation(reservation);    // reservation에 memberId있어서 member 따로 안넘겨줘도 됨
+
+            double totalMoney = outputView.calculateTotalAmount(reservation, roomType, member.getRank()); // 등급할인 까지만 적용된 총 금액
+
+
+            // 쿠폰 적용
+            available = couponRepository.getCouponOfUserId(member.getId());
+            if (!available.isEmpty()) {  // 쿠폰을 갖고 있으면
+                // 유효기간 거르는 함수
+                available = couponService.deleteCouponExpired(available);
+                couponService.printCoupon(available);
+                int couponIndex = inputView.inputUseCoupon(available) - 1;
+
+                // 쿠폰 등록
+                int checkNthTime = couponService.nthTimeCheckCoupon(reservation.getId());
+                if(checkNthTime == 30 || checkNthTime == 50){
+                    couponService.registerCoupon(member.getId(), todaysDate, checkNthTime);
+                }
+                if(couponService.checkCoupon(totalMoney)){
+                    couponService.registerCoupon(member.getId(), todaysDate,30);
+                }
+
+                if (couponIndex != -1) {
+                    Coupon selectedCoupon = available.get(couponIndex);
+                    int couponNum = Integer.parseInt(selectedCoupon.getCouponNumber());
+                    if(couponNum == 30)
+                        totalMoney = totalMoney * 0.7;
+                    else if(couponNum == 50)
+                        totalMoney = totalMoney * 0.5;
+                    else
+                        totalMoney = totalMoney * 1;
+                }
+            }
+            int willYouPay;
+            do{
+                willYouPay = inputView.inputWillYouPay();
+                if(willYouPay == 1) {
+                    //토탈 금액 업데이트
+                    reservationService.getMemberRepository().getMemberById(member.getId()).setTotalMoneySpent((int)Math.round(member.getTotalMoneySpent()+totalMoney));
+                    reservationService.getMemberRepository().updateFile();
+                    outputView.printReceipt(reservation, member.getRank(), member, roomType, totalMoney);
+                    return;
+                }
+            }while (willYouPay != 2);
         }
     }
 

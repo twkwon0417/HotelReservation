@@ -21,24 +21,25 @@ public class ManagerController {
     ReservationService reservationService = new ReservationService(new ReservationRepository(), new MemberRepository());
     MemberService memberService = new MemberService(new MemberRepository());
     RoomService roomService = new RoomService();
-
+    public ReservationService getReservationService(){
+        return this.reservationService;
+    }
     public void initMain() {
-        int userInput = inputView.inputManagerPage();
+        while (true){
+            int userInput = inputView.inputManagerPage();
 
-        if(userInput == 1) {
-            initMemberManagement();
-            initMain();
-        } else if (userInput == 2) {
-            initRoomManagement();
-            initMain();
-        } else if (userInput == 3) {
-            int userLogoutInput = inputView.inputLogoutConfirm();
-            if(userLogoutInput == 1) {
-                return;
-            } else if (userLogoutInput == 2) {
-                initMain();
+            if(userInput == 1) {
+                initMemberManagement();
+            } else if (userInput == 2) {
+                initRoomManagement();
+            } else if (userInput == 3) {
+                int userLogoutInput = inputView.inputLogoutConfirm();
+                if(userLogoutInput == 1) {
+                    return;
+                }
             }
         }
+
     }
 
     private void initMemberManagement() {
@@ -48,7 +49,7 @@ public class ManagerController {
             member = memberService.getByPhoneNumber(phoneNumber);
             if(member == null) throw new Exception("회원을 찾을수 없습니다.");    // try-catch로 반복 시킬려구 만든 어거지 코드입니다. 신경쓰지 않으ㅕ도 됩니당.
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("회원을 찾을 수 없습니다");
             initMemberManagement();
         }
 
@@ -61,9 +62,8 @@ public class ManagerController {
             memberService.changeMemberRank(member, command);    // 받은 입력은 memberService에서 처리, 38개 단어들 중 하나가 나올떄 까지 계속 반복됨
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            changeMemberRank(member);
         }
-        System.out.println("등급 수정이 완료 되었습니다.");
+
     }
     private void initRoomManagement() {
         LocalDate todaysDate= inputView.inputTodaysDate();
@@ -75,6 +75,9 @@ public class ManagerController {
             return;
         }
         RoomNumber roomNumber = inputView.inputRoomNumber();
+        if(roomNumber == null){
+            return;
+        }
 
         // 해당 날짜에 예약된 방들중 해당 방번호인 예약을 찾는 코드 입니다.
         Optional<Reservation> matchingReservation = reservations.stream().filter(x -> x.getRoomNumber().ofInt() == roomNumber.ofInt()).findAny();
@@ -87,30 +90,32 @@ public class ManagerController {
     }
 
     private void roomManagement(Reservation reservation, LocalDate todaysDate) {
-        int userInput = inputView.inputRoomManagement();
-        if(userInput == 1) {
-            cancelRoom(reservation, todaysDate);
-            roomManagement(reservation, todaysDate);
-        } else if (userInput == 2) {
-            changeRoom(reservation, todaysDate);
-            roomManagement(reservation, todaysDate);
-        } else if (userInput == 3) {
-            restrictRoom(reservation, todaysDate);
-            roomManagement(reservation, todaysDate);
-        } else if (userInput == 4) {
-            extendStayingDate(reservation, todaysDate);
-            roomManagement(reservation, todaysDate);
-        } else if(userInput == 5) {
-            int userReturnInput = inputView.inputReturnToManagerMenu();
-            if(userReturnInput == 1) {
-                return;
-            } else if(userReturnInput == 2) {
-                roomManagement(reservation, todaysDate);
-            } else {
-                System.out.println("잘못된 입력입니다.");
-                roomManagement(reservation, todaysDate);
+
+        while (true){
+            int userInput = inputView.inputRoomManagement();
+            if(userInput == 1) {
+                cancelRoom(reservation, todaysDate);
+            } else if (userInput == 2) {
+                changeRoom(reservation, todaysDate);
+            } else if (userInput == 3) {
+                restrictRoom(reservation, todaysDate);
+            } else if (userInput == 4) {
+                extendStayingDate(reservation, todaysDate);
+            } else if(userInput == 5) {
+
+                while (true){
+                    int userReturnInput = inputView.inputReturnToManagerMenu();
+                    if(userReturnInput == 1) {
+                        return;
+                    } else if(userReturnInput == 2) {
+                        break;
+                    } else {
+                        System.out.println("잘못된 입력입니다.");
+                    }
+                }
             }
         }
+
     }
 
     private void cancelRoom(Reservation reservation, LocalDate todaysDate) { // roomManagement의 1번   // db update, input, output
@@ -118,8 +123,6 @@ public class ManagerController {
         if(userInput == 1) {
             reservationService.deleteReservation(reservation);
             outputView.printRoomCanceled();
-        } else if (userInput == 2) {
-            roomManagement(reservation, todaysDate);    // 다시화면으로
         }
     }
 
@@ -134,8 +137,6 @@ public class ManagerController {
                 changeRoom(reservation, todaysDate);
             }
             outputView.printRoomChanged();
-        } else if (userInput == 2) {
-            roomManagement(reservation, todaysDate);
         }
     }
 
@@ -145,8 +146,6 @@ public class ManagerController {
 //            reservationService.       // 일단 보류
             roomService.restrictRoom(reservation);
             outputView.printRoomRestricted();
-        } else if (userInput == 2) {
-            roomManagement(reservation, todaysDate);
         }
     }
 
@@ -161,8 +160,6 @@ public class ManagerController {
                 extendStayingDate(reservation, todaysDate);
             }
             outputView.printRoomDateExtended();
-        } else if (userInput == 2) {
-            roomManagement(reservation, todaysDate);
         }
     }
 }

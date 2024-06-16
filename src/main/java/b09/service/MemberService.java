@@ -14,6 +14,9 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    public MemberRepository getMemberRepository(){
+        return this.memberRepository;
+    }
     public Member enter(PhoneNumber phoneNumber) throws Exception {  // 로그인 화면에서 들어올떄 쓰는 로직 : login + register이라 보시면 편합니다.
         Member member = memberRepository.getMemberByPhoneNumber(phoneNumber);
         if (member == null) {
@@ -25,7 +28,11 @@ public class MemberService {
     public void changeMemberRank(Member member, String input) throws Exception {
         Rank rank = commandToRank(input);
         int minimumSpent = 0;
-
+        Rank memberNowRank = member.getRank();
+        if(memberNowRank.equals(rank)){
+            System.out.println("바꾸려는 등급과 현재 등급이 같습니다.");
+            return;
+        }
         switch (rank) {
             case BRONZE:
                 minimumSpent = 0;
@@ -51,6 +58,7 @@ public class MemberService {
 
         // 변경 사항을 파일에 저장
         memberRepository.updateFile();
+        System.out.println("등급 수정이 완료 되었습니다.");
     }
 
 

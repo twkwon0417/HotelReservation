@@ -112,7 +112,7 @@ public class InputView {
             int userIntInput = Integer.parseInt(userInput);
             return new RoomNumber(userIntInput);
         } catch (NumberFormatException e) {
-            System.out.println("숫자를 입력 해주세요0.");
+            System.out.println("형식에 맞지 않은 입력입니다.");
             System.out.print("> ");
             return inputRoomNumber();
         } catch (Exception e) {
@@ -137,7 +137,7 @@ public class InputView {
             }
             throw new Exception("보여준 예약 가능한 방들 중 하나를 입력해주세요.");
         } catch (NumberFormatException e) {
-            System.out.println("숫자를 입력 해주세요.");
+            System.out.println("형식에 맞지 않은 입력입니다.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -156,7 +156,7 @@ public class InputView {
             int userIntInput = Integer.parseInt(userInput);
             return new NumberOfPeople(userIntInput);
         } catch (NumberFormatException e) {
-            System.out.println("숫자를 입력 해주세요.");
+            System.out.println("형식에 맞지 않은 입력입니다.");
             System.out.print("> ");
             return inputNumberOfPeople();
         } catch (Exception e) {
@@ -547,7 +547,7 @@ public class InputView {
         }
     }
     public int inputReturnToManagerMenu() {    // 관리자 메뉴로돌아가시겠습니까?1. yes2. no
-        System.out.println("로그아웃 하시겠습니까?\n"
+        System.out.println("관리자 메뉴로 돌아가시겠습니까?\n"
                 + "1. yes 2. no");
         System.out.print("> ");
         String userInput = scan.nextLine();
@@ -592,6 +592,7 @@ public class InputView {
         int couponIndex = 0;
         try {
             couponIndex = scan.nextInt();
+            scan.nextLine();
         } catch (Exception e) {
             System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
             scan.nextLine();
@@ -604,6 +605,7 @@ public class InputView {
         }
         else {
             System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
+            scan.nextLine();
             return inputUseCoupon(couponList);
         }
     }
